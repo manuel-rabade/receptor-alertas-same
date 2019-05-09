@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.3.2">
+<eagle version="9.4.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -982,6 +982,146 @@ Example datasheet (CSTCE_VH3L)</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="OPL_Connector" urn="urn:adsk.eagle:library:8004395">
+<description>Seeed Open Parts Library (OPL) for the Seeed Fusion PCB Assembly Service</description>
+<packages>
+<package name="H2X3-2.54" urn="urn:adsk.eagle:footprint:8004448/1" library_version="4">
+<wire x1="-2.54" y1="3.81" x2="2.54" y2="3.81" width="0.127" layer="21"/>
+<wire x1="2.54" y1="3.81" x2="2.54" y2="-3.81" width="0.127" layer="21"/>
+<wire x1="2.54" y1="-3.81" x2="-2.54" y2="-3.81" width="0.127" layer="21"/>
+<wire x1="-2.54" y1="-3.81" x2="-2.54" y2="3.81" width="0.127" layer="21"/>
+<wire x1="-2.54" y1="3.81" x2="2.54" y2="3.81" width="0" layer="39"/>
+<wire x1="2.54" y1="3.81" x2="2.54" y2="-3.81" width="0" layer="39"/>
+<wire x1="2.54" y1="-3.81" x2="-2.54" y2="-3.81" width="0" layer="39"/>
+<wire x1="-2.54" y1="-3.81" x2="-2.54" y2="3.81" width="0" layer="39"/>
+<pad name="1" x="-1.27" y="2.54" drill="0.889" diameter="1.651" shape="square"/>
+<pad name="2" x="-1.27" y="0" drill="0.889" diameter="1.651"/>
+<pad name="3" x="-1.27" y="-2.54" drill="0.889" diameter="1.651"/>
+<pad name="4" x="1.27" y="-2.54" drill="0.889" diameter="1.651"/>
+<pad name="5" x="1.27" y="0" drill="0.889" diameter="1.651"/>
+<pad name="6" x="1.27" y="2.54" drill="0.889" diameter="1.651"/>
+<text x="-3.175" y="-2.54" size="0.889" layer="25" ratio="11" rot="R90">&gt;name</text>
+<text x="3.81" y="-2.54" size="0.889" layer="27" ratio="11" rot="R90">&gt;value</text>
+<rectangle x1="-2.54" y1="-3.81" x2="2.54" y2="3.81" layer="39"/>
+</package>
+</packages>
+<packages3d>
+<package3d name="H2X3-2.54" urn="urn:adsk.eagle:package:8004534/1" type="box" library_version="4">
+<packageinstances>
+<packageinstance name="H2X3-2.54"/>
+</packageinstances>
+</package3d>
+</packages3d>
+<symbols>
+<symbol name="HEADER-2X3P" urn="urn:adsk.eagle:symbol:8004421/1" library_version="4">
+<wire x1="-3.81" y1="-5.08" x2="-3.81" y2="5.08" width="0.254" layer="94"/>
+<wire x1="-3.81" y1="5.08" x2="3.81" y2="5.08" width="0.254" layer="94"/>
+<wire x1="3.81" y1="5.08" x2="3.81" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="3.81" y1="-5.08" x2="-3.81" y2="-5.08" width="0.254" layer="94"/>
+<text x="-6.35" y="6.35" size="1.27" layer="95" ratio="10">&gt;name</text>
+<text x="0" y="6.35" size="1.27" layer="96" ratio="10">&gt;value</text>
+<pin name="1" x="-8.89" y="2.54" visible="pad" length="middle" function="dotclk"/>
+<pin name="2" x="-8.89" y="0" visible="pad" length="middle"/>
+<pin name="3" x="-8.89" y="-2.54" visible="pad" length="middle"/>
+<pin name="4" x="8.89" y="-2.54" visible="pad" length="middle" rot="R180"/>
+<pin name="5" x="8.89" y="0" visible="pad" length="middle" rot="R180"/>
+<pin name="6" x="8.89" y="2.54" visible="pad" length="middle" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="DIP-BLACK-MALE-HEADER(2X3P-2.54）" urn="urn:adsk.eagle:component:8004603/1" prefix="J" uservalue="yes" library_version="4">
+<description>320020077</description>
+<gates>
+<gate name="J" symbol="HEADER-2X3P" x="0" y="0"/>
+</gates>
+<devices>
+<device name="-2.54" package="H2X3-2.54">
+<connects>
+<connect gate="J" pin="1" pad="1"/>
+<connect gate="J" pin="2" pad="2"/>
+<connect gate="J" pin="3" pad="3"/>
+<connect gate="J" pin="4" pad="4"/>
+<connect gate="J" pin="5" pad="5"/>
+<connect gate="J" pin="6" pad="6"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:8004534/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="MPN" value="P125-12A1BS116A1" constant="no"/>
+<attribute name="VALUE" value="2x3p-2.54" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+<library name="OPL_Resistor" urn="urn:adsk.eagle:library:8004883">
+<description>&lt;b&gt;Seeed Open Parts Library (OPL) for the Seeed Fusion PCB Assembly Service
+&lt;br&gt;&lt;br&gt;
+&lt;a href="https://www.seeedstudio.com/opl.html" title="https://www.seeedstudio.com/opl.html"&gt;Seeed Fusion PCBA OPL&lt;/a&gt;&lt;br&gt;
+&lt;a href="https://www.seeedstudio.com/fusion_pcb.html"&gt;Order PCB/PCBA&lt;/a&gt;&lt;br&gt;&lt;br&gt;
+&lt;a href="https://www.seeedstudio.com"&gt;www.seeedstudio.com&lt;/a&gt;
+&lt;br&gt;&lt;/b&gt;</description>
+<packages>
+<package name="R0603" urn="urn:adsk.eagle:footprint:8004924/1" library_version="3">
+<wire x1="0.635" y1="1.397" x2="0.635" y2="-1.397" width="0.127" layer="21"/>
+<wire x1="0.635" y1="-1.397" x2="-0.635" y2="-1.397" width="0.127" layer="21"/>
+<wire x1="-0.635" y1="-1.397" x2="-0.635" y2="1.397" width="0.127" layer="21"/>
+<wire x1="-0.635" y1="1.397" x2="0.635" y2="1.397" width="0.127" layer="21"/>
+<smd name="1" x="0" y="0.762" dx="0.889" dy="0.889" layer="1" roundness="25" rot="R270"/>
+<smd name="2" x="0" y="-0.762" dx="0.889" dy="0.889" layer="1" roundness="25" rot="R270"/>
+<text x="-1.016" y="-1.905" size="0.889" layer="25" ratio="11" rot="R90">&gt;NAME</text>
+<text x="1.435" y="-1.605" size="0.635" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
+</package>
+</packages>
+<packages3d>
+<package3d name="R0603" urn="urn:adsk.eagle:package:8004941/1" type="box" library_version="3">
+<packageinstances>
+<packageinstance name="R0603"/>
+</packageinstances>
+</package3d>
+</packages3d>
+<symbols>
+<symbol name="RES" urn="urn:adsk.eagle:symbol:8004930/1" library_version="3">
+<wire x1="-1.27" y1="0.508" x2="1.27" y2="0.508" width="0.254" layer="94"/>
+<wire x1="1.27" y1="0.508" x2="1.27" y2="-0.508" width="0.254" layer="94"/>
+<wire x1="1.27" y1="-0.508" x2="-1.27" y2="-0.508" width="0.254" layer="94"/>
+<wire x1="-1.27" y1="-0.508" x2="-1.27" y2="0.508" width="0.254" layer="94"/>
+<text x="-3.81" y="1.27" size="1.27" layer="95" ratio="10">&gt;NAME</text>
+<text x="-3.81" y="-2.54" size="1.27" layer="96" ratio="10">&gt;VALUE</text>
+<pin name="1" x="-3.81" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
+<pin name="2" x="3.81" y="0" visible="off" length="short" direction="pas" swaplevel="1" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="SMD-RES-10K-5%-1/10W(0603)" urn="urn:adsk.eagle:component:8004997/1" prefix="R" uservalue="yes" library_version="3">
+<description>301010293</description>
+<gates>
+<gate name="G$1" symbol="RES" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="R0603">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:8004941/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="MPN" value="RC0603JR-0710KL" constant="no"/>
+<attribute name="VALUE" value="10K 1/10W" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -1006,6 +1146,11 @@ Example datasheet (CSTCE_VH3L)</description>
 <part name="C2" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1uF"/>
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
+<part name="J1" library="OPL_Connector" library_urn="urn:adsk.eagle:library:8004395" deviceset="DIP-BLACK-MALE-HEADER(2X3P-2.54）" device="-2.54" package3d_urn="urn:adsk.eagle:package:8004534/1" value="ICSP"/>
+<part name="GND4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
+<part name="R1" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-10K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="10k"/>
+<part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -1034,8 +1179,8 @@ Example datasheet (CSTCE_VH3L)</description>
 <attribute name="NAME" x="153.67" y="140.97" size="1.27" layer="95" ratio="10"/>
 <attribute name="VALUE" x="153.67" y="137.16" size="1.27" layer="96" ratio="10"/>
 </instance>
-<instance part="P+1" gate="VCC" x="160.02" y="165.1" smashed="yes">
-<attribute name="VALUE" x="160.02" y="167.64" size="1.778" layer="96" rot="R180"/>
+<instance part="P+1" gate="VCC" x="144.78" y="157.48" smashed="yes">
+<attribute name="VALUE" x="144.78" y="160.02" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="GND2" gate="1" x="160.02" y="88.9" smashed="yes">
 <attribute name="VALUE" x="157.48" y="86.36" size="1.778" layer="96"/>
@@ -1049,6 +1194,23 @@ Example datasheet (CSTCE_VH3L)</description>
 </instance>
 <instance part="P+2" gate="VCC" x="147.32" y="106.68" smashed="yes">
 <attribute name="VALUE" x="147.32" y="109.22" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="J1" gate="J" x="231.14" y="78.74" smashed="yes">
+<attribute name="NAME" x="224.79" y="85.09" size="1.27" layer="95" ratio="10"/>
+<attribute name="VALUE" x="231.14" y="85.09" size="1.27" layer="96" ratio="10"/>
+</instance>
+<instance part="GND4" gate="1" x="241.3" y="86.36" smashed="yes" rot="R180">
+<attribute name="VALUE" x="243.84" y="88.9" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="P+3" gate="VCC" x="215.9" y="86.36" smashed="yes">
+<attribute name="VALUE" x="215.9" y="88.9" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="R1" gate="G$1" x="160.02" y="160.02" smashed="yes" rot="R90">
+<attribute name="NAME" x="158.75" y="161.29" size="1.27" layer="95" ratio="10" rot="R180"/>
+<attribute name="VALUE" x="165.1" y="160.02" size="1.27" layer="96" ratio="10" rot="R180"/>
+</instance>
+<instance part="P+4" gate="VCC" x="160.02" y="167.64" smashed="yes">
+<attribute name="VALUE" x="160.02" y="170.18" size="1.778" layer="96" rot="R180"/>
 </instance>
 </instances>
 <busses>
@@ -1098,6 +1260,12 @@ Example datasheet (CSTCE_VH3L)</description>
 <pinref part="GND3" gate="1" pin="GND"/>
 <wire x1="147.32" y1="92.71" x2="147.32" y2="91.44" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="J1" gate="J" pin="6"/>
+<wire x1="240.03" y1="81.28" x2="241.3" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="GND4" gate="1" pin="GND"/>
+<wire x1="241.3" y1="81.28" x2="241.3" y2="83.82" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="N$3" class="0">
 <segment>
@@ -1110,21 +1278,75 @@ Example datasheet (CSTCE_VH3L)</description>
 <segment>
 <pinref part="U1" gate="U$1" pin="VCC@6"/>
 <pinref part="P+1" gate="VCC" pin="VCC"/>
-<wire x1="162.56" y1="144.78" x2="160.02" y2="144.78" width="0.1524" layer="91"/>
-<wire x1="160.02" y1="144.78" x2="160.02" y2="147.32" width="0.1524" layer="91"/>
+<wire x1="162.56" y1="144.78" x2="144.78" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="144.78" x2="144.78" y2="147.32" width="0.1524" layer="91"/>
 <pinref part="U1" gate="U$1" pin="VCC@4"/>
-<wire x1="160.02" y1="147.32" x2="160.02" y2="149.86" width="0.1524" layer="91"/>
-<wire x1="160.02" y1="149.86" x2="160.02" y2="162.56" width="0.1524" layer="91"/>
-<wire x1="162.56" y1="147.32" x2="160.02" y2="147.32" width="0.1524" layer="91"/>
-<junction x="160.02" y="147.32"/>
+<wire x1="144.78" y1="147.32" x2="144.78" y2="149.86" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="149.86" x2="144.78" y2="154.94" width="0.1524" layer="91"/>
+<wire x1="162.56" y1="147.32" x2="144.78" y2="147.32" width="0.1524" layer="91"/>
+<junction x="144.78" y="147.32"/>
 <pinref part="U1" gate="U$1" pin="AVCC"/>
-<wire x1="162.56" y1="149.86" x2="160.02" y2="149.86" width="0.1524" layer="91"/>
-<junction x="160.02" y="149.86"/>
+<wire x1="162.56" y1="149.86" x2="144.78" y2="149.86" width="0.1524" layer="91"/>
+<junction x="144.78" y="149.86"/>
 </segment>
 <segment>
 <pinref part="P+2" gate="VCC" pin="VCC"/>
 <pinref part="C2" gate="G$1" pin="1"/>
 <wire x1="147.32" y1="104.14" x2="147.32" y2="100.33" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="J1" gate="J" pin="2"/>
+<wire x1="222.25" y1="78.74" x2="215.9" y2="78.74" width="0.1524" layer="91"/>
+<pinref part="P+3" gate="VCC" pin="VCC"/>
+<wire x1="215.9" y1="78.74" x2="215.9" y2="83.82" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="P+4" gate="VCC" pin="VCC"/>
+<pinref part="R1" gate="G$1" pin="2"/>
+<wire x1="160.02" y1="165.1" x2="160.02" y2="163.83" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="U1" gate="U$1" pin="PB4(MISO)"/>
+<wire x1="210.82" y1="99.06" x2="220.98" y2="99.06" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="99.06" x2="220.98" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="J1" gate="J" pin="1"/>
+<wire x1="220.98" y1="81.28" x2="222.25" y2="81.28" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$5" class="0">
+<segment>
+<pinref part="U1" gate="U$1" pin="PB5(SCK)"/>
+<wire x1="210.82" y1="96.52" x2="218.44" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="218.44" y1="96.52" x2="218.44" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="J1" gate="J" pin="3"/>
+<wire x1="218.44" y1="76.2" x2="222.25" y2="76.2" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$6" class="0">
+<segment>
+<pinref part="U1" gate="U$1" pin="PB3(MOSI/OC2)"/>
+<wire x1="210.82" y1="101.6" x2="251.46" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="251.46" y1="101.6" x2="251.46" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="J1" gate="J" pin="4"/>
+<wire x1="251.46" y1="76.2" x2="240.03" y2="76.2" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="RST" class="0">
+<segment>
+<pinref part="J1" gate="J" pin="5"/>
+<wire x1="240.03" y1="78.74" x2="241.3" y2="78.74" width="0.1524" layer="91"/>
+<label x="241.3" y="78.74" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="U1" gate="U$1" pin="PC6(/RESET)"/>
+<wire x1="162.56" y1="154.94" x2="160.02" y2="154.94" width="0.1524" layer="91"/>
+<pinref part="R1" gate="G$1" pin="1"/>
+<wire x1="160.02" y1="154.94" x2="160.02" y2="156.21" width="0.1524" layer="91"/>
+<wire x1="160.02" y1="154.94" x2="157.48" y2="154.94" width="0.1524" layer="91"/>
+<junction x="160.02" y="154.94"/>
+<label x="157.48" y="154.94" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 </nets>
