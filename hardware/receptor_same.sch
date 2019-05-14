@@ -3515,7 +3515,9 @@ package</description>
 <part name="Q1" library="OPL_Discrete_Semiconductor" library_urn="urn:adsk.eagle:library:8004488" deviceset="SMD-TRANSISTORS-NPN-40V-200MA-MMBT3904LT1G(SOT-23)" device="" package3d_urn="urn:adsk.eagle:package:8004539/1" value="MMBT3904LT1G"/>
 <part name="GND19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R16" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-1.5K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="1.5K"/>
-<part name="J4" library="OPL_Connector" library_urn="urn:adsk.eagle:library:8004395" deviceset="DIP-BLACK-MALE-HEADER-VERT(3P-2.54)" device="" package3d_urn="urn:adsk.eagle:package:8004514/1" value="AUX-POWER"/>
+<part name="J4" library="OPL_Connector" library_urn="urn:adsk.eagle:library:8004395" deviceset="DIP-BLACK-MALE-HEADER-VERT(3P-2.54)" device="" package3d_urn="urn:adsk.eagle:package:8004514/1" value="AUX-POWER">
+<attribute name="MPN" value="P125-1103A1BS116A1"/>
+</part>
 <part name="P+17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND20" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+18" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
@@ -4636,6 +4638,7 @@ package</description>
 <instance part="J4" gate="G$1" x="99.06" y="24.13" smashed="yes">
 <attribute name="VALUE" x="96.52" y="16.51" size="1.27" layer="96" ratio="10"/>
 <attribute name="NAME" x="96.52" y="30.48" size="1.27" layer="95" ratio="10"/>
+<attribute name="MPN" x="99.06" y="24.13" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="P+17" gate="G$1" x="88.9" y="34.29" smashed="yes">
 <attribute name="VALUE" x="91.44" y="36.83" size="1.778" layer="96" rot="R180"/>
