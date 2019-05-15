@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -3465,7 +3465,7 @@ package</description>
 <part name="C14" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-10UF-25V-10%-X5R(1206)" device="" package3d_urn="urn:adsk.eagle:package:8004280/1" value="10UF-50V">
 <attribute name="MPN" value="CL31A106KBHNNNE"/>
 </part>
-<part name="C15" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="100NF-50V"/>
+<part name="C15" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1UF"/>
 <part name="GND16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="D5" library="OPL_Discrete_Semiconductor" library_urn="urn:adsk.eagle:library:8004488" deviceset="SMD-DIODE-SCHOTTKY-40V-1A(DO-214AC)" device="" package3d_urn="urn:adsk.eagle:package:8004547/1" value="40V-1A"/>
 <part name="L4" library="seed-opl-2017-01-inductor-akita" deviceset="303010525_22UH_7.1X6.6MM" device="" value="22UH-2.2A">
@@ -3474,8 +3474,8 @@ package</description>
 <part name="R14" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-51K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="52.3K">
 <attribute name="MPN" value="WR06X5232FTL"/>
 </part>
-<part name="C16" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-10UF-6.3V-20%-X5R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="10UF-6.3V"/>
-<part name="C17" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-10UF-6.3V-20%-X5R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="10UF-6.3V"/>
+<part name="C16" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-10UF-6.3V-20%-X5R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="10UF"/>
+<part name="C17" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-10UF-6.3V-20%-X5R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="10UF"/>
 <part name="X5" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="POWER">
 <attribute name="MPN" value="1725656"/>
 </part>
