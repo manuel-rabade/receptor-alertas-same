@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.3.2">
+<eagle version="9.4.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.05" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -3312,20 +3312,20 @@ package</description>
 <part name="U1" library="SparkFun-IC-Microcontroller" library_urn="urn:adsk.eagle:library:525" deviceset="ATMEGA328P_TQFP" device="" package3d_urn="urn:adsk.eagle:package:38945/1" value="ATMEGA328P_TQFP">
 <attribute name="MPN" value="ATMEGA328P-AU"/>
 </part>
-<part name="Y1" library="SparkFun-Clocks" library_urn="urn:adsk.eagle:library:511" deviceset="RESONATOR-8MHZ" device="SMD_3.2X1.3" package3d_urn="urn:adsk.eagle:package:37551/1" value="8MHz">
+<part name="Y1" library="SparkFun-Clocks" library_urn="urn:adsk.eagle:library:511" deviceset="RESONATOR-8MHZ" device="SMD_3.2X1.3" package3d_urn="urn:adsk.eagle:package:37551/1" value="8MHZ">
 <attribute name="MPN" value="CSTCE8M00G55-R0"/>
 </part>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C1" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1uF"/>
+<part name="C1" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1UF"/>
 <part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C2" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1uF"/>
+<part name="C2" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1UF"/>
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="J1" library="OPL_Connector" library_urn="urn:adsk.eagle:library:8004395" deviceset="DIP-BLACK-MALE-HEADER(2X3P-2.54）" device="-2.54" package3d_urn="urn:adsk.eagle:package:8004534/1" value="ICSP"/>
 <part name="GND4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="R1" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-10K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="10k"/>
+<part name="R1" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-10K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="10K"/>
 <part name="U2" library="si4707" deviceset="SPARKFUN-RF_SI4707" device="" value="SI4707">
 <attribute name="MPN" value="SI4707-B20-GM"/>
 <attribute name="SPICEPREFIX" value="X"/>
@@ -3341,7 +3341,7 @@ package</description>
 <part name="GND5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="">
 <attribute name="SPICEPREFIX" value="G"/>
 </part>
-<part name="R4" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-10K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="10k"/>
+<part name="R4" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-10K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="10K"/>
 <part name="P+6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="">
 <attribute name="SPICEPREFIX" value="G"/>
@@ -3349,18 +3349,18 @@ package</description>
 <part name="Y2" library="OPL_Crystal Oscillator" library_urn="urn:adsk.eagle:library:8004402" deviceset="SMD-CRYSTAL-32.768KHZ-12.5PF-20PPM-90K(2P-L2.0X1.2MM)" device="" package3d_urn="urn:adsk.eagle:package:8004453/1" value="3.2768KHZ">
 <attribute name="SPICEPREFIX" value="B"/>
 </part>
-<part name="C3" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1uF"/>
+<part name="C3" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1UF"/>
 <part name="GND7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="">
 <attribute name="SPICEPREFIX" value="G"/>
 </part>
 <part name="P+7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="C4" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-22NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="22nf"/>
-<part name="C5" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-22PF-50V-5%-NPO(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="22pf">
+<part name="C4" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-22NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="22NF"/>
+<part name="C5" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-22PF-50V-5%-NPO(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="22PF">
 <attribute name="SPICEPREFIX" value="C"/>
 </part>
-<part name="C6" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-22PF-50V-5%-NPO(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="22pf">
+<part name="C6" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-22PF-50V-5%-NPO(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="22PF">
 <attribute name="SPICEPREFIX" value="C"/>
 </part>
 <part name="GND9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="">
@@ -3371,7 +3371,7 @@ package</description>
 <attribute name="SPICEPREFIX" value="X"/>
 <attribute name="URL" value="https://www.digikey.com/product-detail/en/texas-instruments/TPA6111A2DR/296-10846-1-ND/381452"/>
 </part>
-<part name="L1" library="sparkfun_si4707_breakout" deviceset="SPARKFUN-PASSIVES_INDUCTOR" device="0603" value="56nH">
+<part name="L1" library="sparkfun_si4707_breakout" deviceset="SPARKFUN-PASSIVES_INDUCTOR" device="0603" value="56NH">
 <attribute name="MPN" value="SDCL1608C56NJTDF"/>
 </part>
 <part name="D1" library="sparkfun_si4707_breakout" deviceset="SPARKFUN-DISCRETESEMI_CM1213" device="" value="CM1213">
@@ -3385,11 +3385,11 @@ package</description>
 <part name="GND11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="">
 <attribute name="SPICEPREFIX" value="G"/>
 </part>
-<part name="C7" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="390NF" device="-0603-10V-10%" package3d_urn="urn:adsk.eagle:package:37414/1" value="390nF">
+<part name="C7" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="390NF" device="-0603-10V-10%" package3d_urn="urn:adsk.eagle:package:37414/1" value="390NF">
 <attribute name="MPN" value="CC0603KRX7R6BB394"/>
 <attribute name="SPICEPREFIX" value="C"/>
 </part>
-<part name="C8" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="390NF" device="-0603-10V-10%" package3d_urn="urn:adsk.eagle:package:37414/1" value="390nF">
+<part name="C8" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="390NF" device="-0603-10V-10%" package3d_urn="urn:adsk.eagle:package:37414/1" value="390NF">
 <attribute name="MPN" value="CC0603KRX7R6BB394"/>
 <attribute name="SPICEPREFIX" value="C"/>
 </part>
@@ -3405,30 +3405,30 @@ package</description>
 <part name="R8" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-47K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="47K">
 <attribute name="SPICEPREFIX" value="R"/>
 </part>
-<part name="C9" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="47UF-POLAR" device="-EIA3528-10V-10%" package3d_urn="urn:adsk.eagle:package:37411/1" value="47uF">
+<part name="C9" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="47UF-POLAR" device="-EIA3528-10V-10%" package3d_urn="urn:adsk.eagle:package:37411/1" value="47UF">
 <attribute name="MPN" value="TAJB476K010RNJ"/>
 <attribute name="SPICEPREFIX" value="C"/>
 </part>
-<part name="C10" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="47UF-POLAR" device="-EIA3528-10V-10%" package3d_urn="urn:adsk.eagle:package:37411/1" value="47uF">
+<part name="C10" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="47UF-POLAR" device="-EIA3528-10V-10%" package3d_urn="urn:adsk.eagle:package:37411/1" value="47UF">
 <attribute name="MPN" value="TAJB476K010RNJ"/>
 <attribute name="SPICEPREFIX" value="C"/>
 </part>
-<part name="L2" library="OPL_Inductor" library_urn="urn:adsk.eagle:library:8004654" deviceset="SMD-INDUCTOR-4.7NH-0.3NH-300MA(0402)" device="" package3d_urn="urn:adsk.eagle:package:8004741/1" value="2.5kNH-50MA">
+<part name="L2" library="OPL_Inductor" library_urn="urn:adsk.eagle:library:8004654" deviceset="SMD-INDUCTOR-4.7NH-0.3NH-300MA(0402)" device="" package3d_urn="urn:adsk.eagle:package:8004741/1" value="2.5KNH-50MA">
 <attribute name="MPN" value="BLM18BD252SN1D"/>
 <attribute name="SPICEPREFIX" value="L"/>
 </part>
-<part name="L3" library="OPL_Inductor" library_urn="urn:adsk.eagle:library:8004654" deviceset="SMD-INDUCTOR-4.7NH-0.3NH-300MA(0402)" device="" package3d_urn="urn:adsk.eagle:package:8004741/1" value="2.5kNH-50MA">
+<part name="L3" library="OPL_Inductor" library_urn="urn:adsk.eagle:library:8004654" deviceset="SMD-INDUCTOR-4.7NH-0.3NH-300MA(0402)" device="" package3d_urn="urn:adsk.eagle:package:8004741/1" value="2.5KNH-50MA">
 <attribute name="MPN" value="BLM18BD252SN1D"/>
 <attribute name="SPICEPREFIX" value="L"/>
 </part>
-<part name="C11" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1uF"/>
+<part name="C11" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1UF"/>
 <part name="GND12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="">
 <attribute name="SPICEPREFIX" value="G"/>
 </part>
 <part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="">
 <attribute name="SPICEPREFIX" value="G"/>
 </part>
-<part name="C12" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1uF"/>
+<part name="C12" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1UF"/>
 <part name="GND14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="">
 <attribute name="SPICEPREFIX" value="G"/>
 </part>
@@ -3442,7 +3442,7 @@ package</description>
 <attribute name="MPN" value="RC0805JR-07120RL"/>
 </part>
 <part name="GND15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R11" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-10K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="10k"/>
+<part name="R11" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-10K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="10K"/>
 <part name="P+11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="X1" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="ANTENNA">
@@ -3460,12 +3460,12 @@ package</description>
 </part>
 <part name="P+12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND18" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C13" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-1NF-50V-5%-C0G(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="1nf"/>
+<part name="C13" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-1NF-50V-5%-C0G(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="1NF"/>
 <part name="D4" library="OPL_Discrete_Semiconductor" library_urn="urn:adsk.eagle:library:8004488" deviceset="SMD-DIODE-100V-200MA(SOD-123)" device="" package3d_urn="urn:adsk.eagle:package:8004543/1" value="MMSD4148"/>
 <part name="C14" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-10UF-25V-10%-X5R(1206)" device="" package3d_urn="urn:adsk.eagle:package:8004280/1" value="10UF-50V">
 <attribute name="MPN" value="CL31A106KBHNNNE"/>
 </part>
-<part name="C15" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="100nf-50V"/>
+<part name="C15" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="100NF-50V"/>
 <part name="GND16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="D5" library="OPL_Discrete_Semiconductor" library_urn="urn:adsk.eagle:library:8004488" deviceset="SMD-DIODE-SCHOTTKY-40V-1A(DO-214AC)" device="" package3d_urn="urn:adsk.eagle:package:8004547/1" value="40V-1A"/>
 <part name="L4" library="seed-opl-2017-01-inductor-akita" deviceset="303010525_22UH_7.1X6.6MM" device="" value="22UH-2.2A">
@@ -3490,7 +3490,7 @@ package</description>
 <part name="U4" library="mcp16301" deviceset="MCP16301/H" device="">
 <attribute name="MPN" value="MCP16301T-I/CHY"/>
 </part>
-<part name="C18" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1uF"/>
+<part name="C18" library="OPL_Capacitor" library_urn="urn:adsk.eagle:library:8004261" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004287/1" value="0.1UF"/>
 <part name="R13" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-120R-5%-1/8W(0805)" device="" package3d_urn="urn:adsk.eagle:package:8004935/1" value="120">
 <attribute name="MPN" value="RC0805JR-07120RL"/>
 </part>
@@ -3516,7 +3516,7 @@ package</description>
 <attribute name="SPICEPREFIX" value="G"/>
 </part>
 <part name="P+19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="R15" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-10K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="10k"/>
+<part name="R15" library="OPL_Resistor" library_urn="urn:adsk.eagle:library:8004883" deviceset="SMD-RES-10K-5%-1/10W(0603)" device="" package3d_urn="urn:adsk.eagle:package:8004941/1" value="10K"/>
 </parts>
 <sheets>
 <sheet>
@@ -3637,12 +3637,12 @@ package</description>
 <attribute name="VALUE" x="187.96" y="143.51" size="1.27" layer="96" ratio="10"/>
 </instance>
 <instance part="C5" gate="G$1" x="121.92" y="114.3" smashed="yes" rot="R90">
-<attribute name="NAME" x="120.65" y="116.84" size="1.27" layer="95" ratio="10" rot="R180"/>
-<attribute name="VALUE" x="125.73" y="116.84" size="1.27" layer="96" ratio="10" rot="R180"/>
+<attribute name="NAME" x="125.73" y="116.84" size="1.27" layer="95" ratio="10" rot="R180"/>
+<attribute name="VALUE" x="127" y="113.03" size="1.27" layer="96" ratio="10" rot="R180"/>
 </instance>
 <instance part="C6" gate="G$1" x="114.3" y="110.49" smashed="yes" rot="R90">
 <attribute name="NAME" x="113.03" y="113.03" size="1.27" layer="95" ratio="10" rot="R180"/>
-<attribute name="VALUE" x="118.11" y="113.03" size="1.27" layer="96" ratio="10" rot="R180"/>
+<attribute name="VALUE" x="113.03" y="109.22" size="1.27" layer="96" ratio="10" rot="R180"/>
 </instance>
 <instance part="GND9" gate="1" x="118.11" y="102.87" smashed="yes">
 <attribute name="VALUE" x="115.57" y="100.33" size="1.778" layer="96"/>
