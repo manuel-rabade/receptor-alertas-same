@@ -4546,14 +4546,14 @@ package</description>
 <wire x1="215.9" y1="76.2" x2="219.71" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$15" class="0">
+<net name="L" class="0">
 <segment>
 <pinref part="L2" gate="L" pin="2"/>
 <wire x1="229.87" y1="76.2" x2="238.76" y2="76.2" width="0.1524" layer="91"/>
 <pinref part="X2" gate="-1" pin="1"/>
 </segment>
 </net>
-<net name="N$16" class="0">
+<net name="R" class="0">
 <segment>
 <pinref part="L3" gate="L" pin="2"/>
 <wire x1="238.76" y1="68.58" x2="229.87" y2="68.58" width="0.1524" layer="91"/>
