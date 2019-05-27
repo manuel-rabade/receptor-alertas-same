@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2019-05-27T03:12:52Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.4.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "receptor_same"
+        },
+        "Owner": "Manuel Rabade <manuel@rabade.net>",
+        "Size": {
+            "X": 78.74,
+            "Y": 60.96
+        }
+    }
+}
