@@ -1,80 +1,45 @@
-#include <avr/wdt.h>
+#include "IO.h"
 
-#define LED1 6
-#define LED2 7
-#define LED3 8
-#define LED4 9
-
-#define BTN 10
-#define RELAY 3
-
+IO io = IO();
 int x = 0;
-int y = 0;
+
 void setup() {
   Serial.begin(9600);
-  Serial.println("Setup");
-
-  pinMode(LED1, OUTPUT);
-  pinMode(LED2, OUTPUT);
-  pinMode(LED3, OUTPUT);
-  pinMode(LED4, OUTPUT);
-
-  pinMode(BTN, INPUT);
-  pinMode(RELAY, OUTPUT);
-
-  digitalWrite(LED1, HIGH);
-  digitalWrite(LED2, HIGH);
-  digitalWrite(LED3, HIGH);
-  digitalWrite(LED4, HIGH);
-
-  digitalWrite(RELAY, HIGH);
-
-  pinMode(A0, OUTPUT);
-  pinMode(A1, OUTPUT);
-  pinMode(A2, OUTPUT);
-  pinMode(A3, OUTPUT);
-
-  digitalWrite(A0, HIGH);
-  digitalWrite(A1, HIGH);
-  digitalWrite(A2, HIGH);
-  digitalWrite(A3, HIGH);
-
-  delay(1000);
+  Serial.println("SETUP");
 }
 
 void loop() {
-  if (x < 1) {
-    Serial.println("Loop");
-    Serial.print("BTN: ");
-    Serial.println(digitalRead(BTN));
-    Serial.print("A6: ");
-    Serial.println(analogRead(A6));
-    digitalWrite(LED1, HIGH);
-    digitalWrite(LED2, LOW);
-    digitalWrite(LED3, HIGH);
-    digitalWrite(LED4, LOW);
-    digitalWrite(A0, HIGH);
-    digitalWrite(A1, LOW);
-    digitalWrite(A2, HIGH);
-    digitalWrite(A3, LOW);
-    x++;
-  } else {
-    digitalWrite(LED1, LOW);
-    digitalWrite(LED2, HIGH);
-    digitalWrite(LED3, LOW);
-    digitalWrite(LED4, HIGH);
-    digitalWrite(A0, LOW);
-    digitalWrite(A1, HIGH);
-    digitalWrite(A2, LOW);
-    digitalWrite(A3, HIGH);
-    if (y < 1) {
-      digitalWrite(RELAY, HIGH);
-      y++;
-    } else {
-      digitalWrite(RELAY, LOW);
-      y = 0;
-    }
+  x++;
+
+  /* if (Serial.available() > 0) { */
+  /*   io.input(Serial.read()); */
+  /* } */
+
+  if (io.isButtonTriggered()) {
+    Serial.println("BUTTON_TRIGGERED");
+  }
+
+  if (x == 100) {
+    Serial.println("LED_1_ON,LED_2_OFF,RELAY_ON");
+    io.ledOn(0);
+    io.ledOff(1);
+    io.relayOn();
+  } else if (x == 200) {
+    Serial.println("LED_1_OFF,LED_2_ON,RELAY_OFF");
+    io.ledOff(0);
+    io.ledOn(1);
+    io.relayOff();
+  } else if (x == 400) {
+    Serial.println("LED_1_SLOW,LED_2_FAST,RELAY_OFF");
+    io.ledSlow(0);
+    io.ledFast(1);
+  } else if (x == 800) {
+    Serial.println("LED_1_FAST,LED_2_SLOW,RELAY_OFF");
+    io.ledFast(0);
+    io.ledSlow(1);
     x = 0;
   }
-  delay(500);
+
+  io.ledRefresh();
+  delay(50);
 }
