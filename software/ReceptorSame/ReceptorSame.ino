@@ -1,46 +1,56 @@
 #include "Si4707.h"
+#include "IO.h"
 
 // parametors same
 #define SAME_TIMEOUT 6000 // 6 segundos
 #define SAME_TEST_TIMEOUT 11400000 // 3 horas y 10 minutos
-
-// interfaz de usuario
-#define BUTTON_DEBOUNCE_DELAY 3000 // 3 segundos
-#define ALERT_TIMEOUT 60000 // 1 minuto
-
-// maquina de estados mensajes same
-#define SAME_EOM_DET 0
+#define SAME_EOM_DET 0 // maquina de estados mensajes same
 #define SAME_PRE_DET 1
 #define SAME_HDR_DET 2
 #define SAME_HDR_RDY 3
 
+// configuracion alerta
+#define ALERT_TIMEOUT 60000 // 1 minuto
+#define RELAY_PIN 3
+
 // globales
 Si4707 radio;
+IO io;
 
-// monitoreo radio
+// alerta
+boolean alert_state;
+unsigned long alert_timer;
+
+// mensajes same
 boolean asq_prev_status;
 byte same_prev_state, same_headers_count;
 unsigned long same_timer, same_test_timer;
-
-// interfaz de usuario
-boolean button_prev_state;
-unsigned long alert_timer, blink_timer, debounce_timer;
 
 // temporal
 unsigned long freq = 162550; // 162.550 MHz
 
 void setup() {
-  // iniciamos puerto serial
+  // variables globales
+  alert_state = 0;
+
+  // puerto serial
   Serial.begin(9600);
   Serial.println("SETUP");
+
+  // entrada/salida
+  io.ledSlow(0);
+  io.ledOff(1);
 
   // iniciamos si4707
   if (radio.begin()) {
     Serial.println("SI4707_OK");
   } else {
     Serial.print("SI4707_ERROR");
+    io.ledFast(0);
+    io.ledFast(1);
     while(1) {
-      // TODO: error en leds
+      io.ledRefresh();
+      delay(50);
     }
   }
 
@@ -119,26 +129,34 @@ void loop() {
   // timeout prueba same
   if (same_test_timer && millis() - same_test_timer > SAME_TEST_TIMEOUT) {
     same_test_timer = 0;
+    io.ledOff(1);
     Serial.println("SAME_TEST_TIMEOUT");
-    // TODO: mostrar en led
   }
 
   // timeout alerta
-  if (alert_timer && millis() - alert_timer > ALERT_TIMEOUT) {
+  if (alert_state && millis() - alert_timer > ALERT_TIMEOUT) {
     alert_timer = 0;
+    alertOff();
     Serial.println("ALERT_TIMEOUT");
-    // TODO: apagar
   }
 
-  // boton de prueba
+  // ---------------------------------------------------------------------------
+  // puerto serial
 
-  // configuracion serial
+  // ---------------------------------------------------------------------------
+  // entrada/salida
 
-  // leds
+  if (io.isButtonTriggered()) {
+    Serial.println("BUTTON_TEST");
+    alertOn();
+  }
 
-  delay(100);
+  io.ledRefresh();
+
+  delay(50);
 }
 
+// ---------------------------------------------------------------------------
 // procesamos mensaje same
 void same_message() {
   byte size = radio.getSAMESize();
@@ -169,6 +187,7 @@ void same_message() {
       msg[6] == 'W' &&
       msg[7] == 'T') {
     same_test_timer = millis();
+    io.ledOn(1);
     Serial.println("SAME_RWT");
   }
 }
@@ -180,7 +199,18 @@ void same_reset() {
   same_headers_count = 0;
 }
 
-// setup alerta
-void alert() {
-  Serial.println("ALERT");
+// alerta
+void alertOn() {
+  alert_state = 1;
+  alert_timer = millis();
+  io.ledFast(0);
+  io.relayOn();
+  Serial.println("ALERT_ON");
+}
+
+void alertOff() {
+  alert_state = 0;
+  io.ledSlow(0);
+  io.relayOff();
+  Serial.println("ALERT_OFF");
 }
