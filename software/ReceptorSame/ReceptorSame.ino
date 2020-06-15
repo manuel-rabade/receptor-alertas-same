@@ -1,25 +1,20 @@
 #include "Si4707.h"
 #include "IO.h"
+#include "Command.h"
 
 // parametors same
-#define SAME_TIMEOUT 6000 // 6 segundos
-#define SAME_TEST_TIMEOUT 11400000 // 3 horas y 10 minutos
-#define SAME_EOM_DET 0 // maquina de estados mensajes same
+#define SAME_TIMEOUT 6000 // tiemo de espera para recibir un mensaje same (segundos)
+
+// maquina de estados mensajes same
+#define SAME_EOM_DET 0
 #define SAME_PRE_DET 1
 #define SAME_HDR_DET 2
 #define SAME_HDR_RDY 3
 
-// configuracion alerta
-#define ALERT_TIMEOUT 60000 // 1 minuto
-#define RELAY_PIN 3
-
 // globales
 Si4707 radio;
 IO io;
-
-// alerta
-boolean alert_state;
-unsigned long alert_timer;
+Command cmd;
 
 // mensajes same
 boolean asq_prev_status;
@@ -28,6 +23,12 @@ unsigned long same_timer, same_test_timer;
 
 // temporal
 unsigned long freq = 162550; // 162.550 MHz
+#define SAME_TEST_TIMEOUT 11400000 // 3 horas y 10 minutos
+#define ALERT_TIMEOUT 60000 // 1 minuto
+
+// alerta
+boolean alert_state;
+unsigned long alert_timer;
 
 void setup() {
   // variables globales
@@ -141,10 +142,10 @@ void loop() {
   }
 
   // ---------------------------------------------------------------------------
-  // puerto serial
 
-  // ---------------------------------------------------------------------------
-  // entrada/salida
+  if (cmd.isReady()) {
+    char* type = cmd.getType();
+  }
 
   if (io.isButtonTriggered()) {
     Serial.println("BUTTON_TEST");
