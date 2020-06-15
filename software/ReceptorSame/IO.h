@@ -4,26 +4,32 @@
 #include <Arduino.h>
 
 // configuracion botón
-#define BUTTON_PIN 10 // pin botón
-#define BUTTON_TIME 5000 // tiempo que se debe presionar el botón para dispararlo (milisegundos)
+#define BUTTON_PIN 10 // pin
+#define BUTTON_TIME 5000 // tiempo que se debe presionar para dispararlo (milisegundos)
 #define BUTTON_DEBOUNCE_TIME 0.3 // tiempo para evitar rebote (segundos)
 #define BUTTON_SAMPLE_FREQUENCY	10 // frecuencia de actualización (hertz)
-#define BUTTON_MAXIMUM (BUTTON_DEBOUNCE_TIME * BUTTON_SAMPLE_FREQUENCY) // máximo integrador
-#define BUTTON_OFF 0 // fsm boton
+#define BUTTON_MAXIMUM (BUTTON_DEBOUNCE_TIME * BUTTON_SAMPLE_FREQUENCY)
+
+// fsm boton
+#define BUTTON_OFF 0
 #define BUTTON_ON  1
 
-// configuracion leds
-#define LEDS_PCB 6,7 // pins leds 1 y 2 en pcb
-#define LEDS_AUX 8,9 // pins leds 1 y 2 auxiliares
-#define BLINK_SLOW_TIME 1000 // tiempo de parapadeo lento  (milisegundos)
-#define BLINK_FAST_TIME 100 // tiempo de parpadeo rápido (milisegundos)
-#define LED_OFF 0 // modos leds
+// pin leds
+#define LEDS_PCB 6,7 // 1 y 2 en pcb
+#define LEDS_AUX 8,9 // 1 y 2 auxiliares
+
+// tiempos de parpadeo
+#define BLINK_SLOW_TIME 1000 // lento  (milisegundos)
+#define BLINK_FAST_TIME 100 // rápido (milisegundos)
+
+// modos leds
+#define LED_OFF 0
 #define LED_ON 1
 #define LED_SLOW 2
 #define LED_FAST 3
 
-// configuracion relay
-#define RELAY_PIN 3 // pin relay
+// pin relay
+#define RELAY_PIN 3
 
 class IO {
 
