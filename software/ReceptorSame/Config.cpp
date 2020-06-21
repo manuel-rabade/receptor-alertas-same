@@ -98,15 +98,15 @@ boolean Config::setAreaCode(char* code) {
     return false;
   }
 
-  return insertSorted(_config.areaCodes[0], 6, &_config.areaCodesCount, code);
+  return _insertSorted(_config.areaCodes[0], 6, &_config.areaCodesCount, code);
 }
 
 boolean Config::clearAreaCode(char* code) {
-  return deleteSorted(_config.areaCodes[0], 6, &_config.areaCodesCount, code);
+  return _deleteSorted(_config.areaCodes[0], 6, &_config.areaCodesCount, code);
 }
 
 boolean Config::findAreaCode(char* code) {
-  if (binarySearch(_config.areaCodes[0], 6, 0, _config.areaCodesCount, _config.areaCodesCount, code) < 0) {
+  if (_binarySearch(_config.areaCodes[0], 6, 0, _config.areaCodesCount, _config.areaCodesCount, code) < 0) {
     return false;
   }
 
@@ -135,15 +135,15 @@ boolean Config::setEventCode(char* code) {
     return false;
   }
 
-  return insertSorted(_config.eventCodes[0], 3, &_config.eventCodesCount, code);
+  return _insertSorted(_config.eventCodes[0], 3, &_config.eventCodesCount, code);
 }
 
 boolean Config::clearEventCode(char* code) {
-  return deleteSorted(_config.eventCodes[0], 3, &_config.eventCodesCount, code);
+  return _deleteSorted(_config.eventCodes[0], 3, &_config.eventCodesCount, code);
 }
 
 boolean Config::findEventCode(char* code) {
-  if (binarySearch(_config.eventCodes[0], 3, 0, _config.eventCodesCount, _config.eventCodesCount, code) < 0) {
+  if (_binarySearch(_config.eventCodes[0], 3, 0, _config.eventCodesCount, _config.eventCodesCount, code) < 0) {
     return false;
   }
 
@@ -181,7 +181,7 @@ int Config::bytes() {
 
 // -------------------------------------------------------------------------------------------------
 
-int Config::binarySearch(char* codes, byte len, int low, int high, byte size, char* key) {
+int Config::_binarySearch(char* codes, byte len, int low, int high, byte size, char* key) {
   // Serial.print("search ");
   // Serial.print(key);
   // Serial.print(" -> ");
@@ -211,13 +211,13 @@ int Config::binarySearch(char* codes, byte len, int low, int high, byte size, ch
   }
 
   if (cmp < 0) {
-    return binarySearch(codes, len, (half + 1), high, size, key);
+    return _binarySearch(codes, len, (half + 1), high, size, key);
   } else {
-    return binarySearch(codes, len, low, (half - 1), size, key);
+    return _binarySearch(codes, len, low, (half - 1), size, key);
   }
 }
 
-boolean Config::insertSorted(char* codes, byte len, byte* size, char* key) {
+boolean Config::_insertSorted(char* codes, byte len, byte* size, char* key) {
   if (*size >= CODES_MAX) {
     return false;
   }
@@ -254,8 +254,8 @@ boolean Config::insertSorted(char* codes, byte len, byte* size, char* key) {
   return true;
 }
 
-boolean Config::deleteSorted(char* codes, byte len, byte* size, char* key) {
-  int pos = binarySearch(codes, len, 0, *size, *size, key);
+boolean Config::_deleteSorted(char* codes, byte len, byte* size, char* key) {
+  int pos = _binarySearch(codes, len, 0, *size, *size, key);
   if (pos < 0) {
     return false;
   }

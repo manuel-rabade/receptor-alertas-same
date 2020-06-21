@@ -11,10 +11,6 @@ void setup() {
 void loop() {
   x++;
 
-  /* if (Serial.available() > 0) { */
-  /*   io.input(Serial.read()); */
-  /* } */
-
   if (io.isButtonTriggered()) {
     Serial.println("BUTTON_TRIGGERED");
   }
@@ -43,3 +39,7 @@ void loop() {
   io.ledRefresh();
   delay(50);
 }
+
+// Local Variables:
+// mode: c++
+// End:

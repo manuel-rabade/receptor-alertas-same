@@ -49,3 +49,7 @@ void loop() {
 
   delay(50);
 }
+
+// Local Variables:
+// mode: c++
+// End:
