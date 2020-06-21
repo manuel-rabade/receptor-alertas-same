@@ -1,0 +1,1 @@
+../ReceptorSame/Config.h

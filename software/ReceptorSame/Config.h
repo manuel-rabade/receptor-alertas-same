@@ -3,27 +3,35 @@
 
 #include <Arduino.h>
 
-#define UINT_SIZE
+#define CODES_MAX 50
 
-#define VERSION_ADDR 1
-#define CHANNEL_ADDR 2
-#define VOLUME_ADDR 3
-#define AUDIO_ADDR 4
-#define RELAY_ADDR 5
-#define RWT_ADDR 6
-#define RMT_ADDR 8
-
-#define AREA_ADDR 10
-#define AREA_SIZE 50
-
-#define EVENT_ADDR 60
-#define EVENT_SIZE 50
+struct Memory {
+  byte version;
+  byte channel;
+  byte volume;
+  byte audio;
+  byte relay;
+  unsigned int rwtDuration;
+  unsigned int rmtDuration;
+  char areaCodes[CODES_MAX][6];
+  char eventCodes[CODES_MAX][3];
+  byte areaCodesCount;
+  byte eventCodesCount;
+};
 
 class Config {
 
+private:
+  Memory _config;
+  int binarySearch(char*, byte, int, int, char*);
+  boolean insertSorted(char*, byte, byte*, char*);
+  boolean deleteSorted(char*, byte, byte*, char*);
+
 public:
   Config();
-  byte version;
+
+  void setVersion(byte);
+  byte getVersion();
 
   boolean setChannel(byte);
   byte getChannel();
@@ -31,7 +39,7 @@ public:
   void setMute(boolean);
   boolean getMute();
 
-  void setVolume(byte);
+  boolean setVolume(byte);
   byte getVolume();
 
   boolean setAudio(byte);
@@ -40,23 +48,29 @@ public:
   boolean setRelay(byte);
   byte getRelay();
 
-  boolean setArea(char*);
-  boolean clearArea(char*);
-  boolean findArea(char*);
-  char* listArea();
-
-  boolean setEvent(char*);
-  boolean clearEvent(char*);
-  boolean findEvent(char*);
-  char* listEvent();
-
-  boolean setRwtDuration(unsigned int);
+  void setRwtDuration(unsigned int);
   unsigned int getRwtDuration();
 
-  boolean setRmtDuration(unsigned int);
+  void setRmtDuration(unsigned int);
   unsigned int getRmtDuration();
 
-  void dump();
+  boolean setAreaCode(char*);
+  boolean clearAreaCode(char*);
+  boolean findAreaCode(char*);
+  byte countAreaCodes();
+  char* strAreaCode(byte);
+  void emptyAreaCodes();
+
+  boolean setEventCode(char*);
+  boolean clearEventCode(char*);
+  boolean findEventCode(char*);
+  byte countEventCodes();
+  char* strEventCode(byte);
+  void emptyEventCodes();
+
+  void save();
+  void reload();
+  int bytes();
 };
 
 #endif
