@@ -106,7 +106,7 @@ boolean Config::clearAreaCode(char* code) {
 }
 
 boolean Config::findAreaCode(char* code) {
-  if (binarySearch(_config.areaCodes[0], 6, 0, _config.areaCodesCount, code) < 0) {
+  if (binarySearch(_config.areaCodes[0], 6, 0, _config.areaCodesCount, _config.areaCodesCount, code) < 0) {
     return false;
   }
 
@@ -143,7 +143,7 @@ boolean Config::clearEventCode(char* code) {
 }
 
 boolean Config::findEventCode(char* code) {
-  if (binarySearch(_config.eventCodes[0], 3, 0, _config.eventCodesCount, code) < 0) {
+  if (binarySearch(_config.eventCodes[0], 3, 0, _config.eventCodesCount, _config.eventCodesCount, code) < 0) {
     return false;
   }
 
@@ -168,11 +168,11 @@ void Config::emptyEventCodes() {
 // -------------------------------------------------------------------------------------------------
 
 void Config::save() {
-
+  EEPROM.put(0, _config);
 }
 
 void Config::reload() {
-
+  EEPROM.get(0, _config);
 }
 
 int Config::bytes() {
@@ -181,15 +181,17 @@ int Config::bytes() {
 
 // -------------------------------------------------------------------------------------------------
 
-int Config::binarySearch(char* codes, byte len, int low, int high, char* key) {
+int Config::binarySearch(char* codes, byte len, int low, int high, byte size, char* key) {
   // Serial.print("search ");
   // Serial.print(key);
   // Serial.print(" -> ");
+  // Serial.print(size);
+  // Serial.print(" ");
   // Serial.print(low);
   // Serial.print(" ");
   // Serial.print(high);
 
-  if (high < low) {
+  if (high < low || size < 1) {
     // Serial.println(" return -1");
     return -1;
   }
@@ -204,15 +206,14 @@ int Config::binarySearch(char* codes, byte len, int low, int high, char* key) {
   int cmp = strncmp(val, key, len);
   // Serial.print(" cmp ");
   // Serial.println(cmp);
-
   if (cmp == 0) {
     return half;
   }
 
   if (cmp < 0) {
-    return binarySearch(codes, len, (half + 1), high, key);
+    return binarySearch(codes, len, (half + 1), high, size, key);
   } else {
-    return binarySearch(codes, len, low, (half - 1), key);
+    return binarySearch(codes, len, low, (half - 1), size, key);
   }
 }
 
@@ -223,8 +224,8 @@ boolean Config::insertSorted(char* codes, byte len, byte* size, char* key) {
   // Serial.print("insert ");
   // Serial.println(key);
 
-  int pos;
-  for (pos = (*size) - 1; pos >= 0; pos--) {
+  int pos = - 1;
+  for (pos = (*size) - 1; (pos >= 0 && (*size) > 0); pos--) {
     // Serial.print("pos ");
     // Serial.print(pos);
     char val[len];
@@ -254,7 +255,7 @@ boolean Config::insertSorted(char* codes, byte len, byte* size, char* key) {
 }
 
 boolean Config::deleteSorted(char* codes, byte len, byte* size, char* key) {
-  int pos = binarySearch(codes, len, 0, *size, key);
+  int pos = binarySearch(codes, len, 0, *size, *size, key);
   if (pos < 0) {
     return false;
   }

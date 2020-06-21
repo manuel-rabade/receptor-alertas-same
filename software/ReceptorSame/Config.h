@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define CODES_MAX 50
+#define CODES_MAX 20
 
 struct Memory {
   byte version;
@@ -23,7 +23,7 @@ class Config {
 
 private:
   Memory _config;
-  int binarySearch(char*, byte, int, int, char*);
+  int binarySearch(char*, byte, int, int, byte, char*);
   boolean insertSorted(char*, byte, byte*, char*);
   boolean deleteSorted(char*, byte, byte*, char*);
 

@@ -12,12 +12,22 @@ void setup() {
   Serial.print("MEM_VERSION,");
   Serial.println(config.getVersion());
 
-  if (config.getVersion() != 0x01) {
+  if (config.getVersion() != 0x03) {
     Serial.println("SET_DEFAULTS");
-    config.setVersion(0x01);
-    // Serial.println(config.getChannel());
-    // Serial.println(config.setMute(true));
-    // ...
+    config.setVersion(0x03);
+    config.setChannel(7);
+    config.setMute(false);
+    config.setVolume(50);
+    config.setAudio(1);
+    config.setRelay(3);
+    config.setRwtDuration(0);
+    config.setRmtDuration(0);
+    config.emptyAreaCodes();
+    testSetAreaCode("123456");
+    dumpAreaCodes();
+    config.emptyEventCodes();
+    testSetEventCode("ABC");
+    dumpEventCodes();
     Serial.println("MEM_SAVE");
     config.save();
   }
