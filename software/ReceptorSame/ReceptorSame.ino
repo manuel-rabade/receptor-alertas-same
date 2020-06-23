@@ -1,66 +1,94 @@
 #include "Si4707.h"
 #include "IO.h"
 #include "Command.h"
+#include "Config.h"
 
 // parametors same
-#define SAME_TIMEOUT 6000 // tiemo de espera para recibir un mensaje same (segundos)
+#define SAME_CHANNELS 162400,162425,162450,162475,162500,162525,162550
+#define SAME_TIMEOUT 6000 // tiempo de espera maximo para recibir un mensaje same (segundos)
 
-// maquina de estados mensajes same
+// maquina de estados same
 #define SAME_EOM_DET 0
 #define SAME_PRE_DET 1
 #define SAME_HDR_DET 2
 #define SAME_HDR_RDY 3
 
-// globales
+// objetos globales
 Si4707 radio;
 IO io;
 Command cmd;
+Config config;
 
-// mensajes same
-boolean asq_prev_status;
-byte same_prev_state, same_headers_count;
-unsigned long same_timer, same_test_timer;
+// constantes y variables globales
+const unsigned long same_channels[] = { SAME_CHANNELS }; // canales same
+boolean asq_prev_status = 0; // estado asq
+byte same_prev_state = 0; // estado same
+byte same_headers_count = 0; // conteo de cabeceras
+unsigned long same_timer = 0; // timeout mensaje same
 
-// temporal
-unsigned long freq = 162550; // 162.550 MHz
-#define SAME_TEST_TIMEOUT 11400000 // 3 horas y 10 minutos
-#define ALERT_TIMEOUT 60000 // 1 minuto
-
-// alerta
-boolean alert_state;
-unsigned long alert_timer;
+// obsoleto
+// #define SAME_TEST_TIMEOUT 11400000 // 3 horas y 10 minutos
+// #define ALERT_TIMEOUT 60000 // 1 minuto
+// unsigned long same_test_timer;
+// boolean alert_state;
+// unsigned long alert_timer;
 
 void setup() {
-  // variables globales
-  alert_state = 0;
-
-  // puerto serial
+  // inicia puerto serial
   Serial.begin(9600);
   Serial.println("SETUP");
 
-  // entrada/salida
-  io.ledSlow(0);
-  io.ledOff(1);
+  // verificacion de memoria
+  Serial.print("MEM_VERSION,");
+  Serial.println(config.getVersion());
+  if (config.getVersion() != 0x02) {
+    Serial.println("LOAD_DEFAULTS");
+    config.setVersion(0x03);
+    config.setChannel(7);
+    config.setMute(true);
+    config.setVolume(63);
+    config.setAudio(2);
+    config.setRelay(3);
+    config.setRwtDuration(0);
+    config.setRmtDuration(0);
+    config.emptyAreaCodes();
+    config.emptyEventCodes();
+    Serial.println("MEM_SAVE");
+    config.save();
+  }
 
-  // iniciamos si4707
+  // inicio si4707
   if (radio.begin()) {
     Serial.println("SI4707_OK");
+    // TODO: io.ledStartup
+    io.ledSlow(0);
+    io.ledOff(1);
   } else {
     Serial.print("SI4707_ERROR");
+    // TODO: io.ledSysError
     io.ledFast(0);
     io.ledFast(1);
-    while(1) {
+    while (1) {
       io.ledRefresh();
       delay(50);
     }
   }
 
-  // sintonizamos canal
-  if (radio.setWBFrequency(freq)) {
-    Serial.println("TUNE_OK");
+  // ajuste de mute y volumen
+  radio.setMuteVolume(config.getMute());
+  Serial.print("SET_MUTE,");
+  Serial.println(config.getMute());
+  config.setVolume(config.getVolume());
+  Serial.print("SET_VOLUME,");
+  Serial.println(config.getVolume());
+
+  // sintonizacion canal
+  if (radio.setWBFrequency(same_channels[config.getChannel() - 1])) {
+    Serial.print("TUNE_OK,");
   } else {
-    Serial.println("TUNE_ERROR");
+    Serial.print("TUNE_ERROR,");
   }
+  Serial.println(config.getChannel());
 }
 
 void loop() {
@@ -68,7 +96,6 @@ void loop() {
   boolean asq_status = radio.getASQ();
   if (asq_prev_status != asq_status) {
     if (asq_status) {
-      same_reset();
       Serial.println("ASQ_ON");
     } else {
       Serial.println("ASQ_OFF");
@@ -128,18 +155,18 @@ void loop() {
   }
 
   // timeout prueba same
-  if (same_test_timer && millis() - same_test_timer > SAME_TEST_TIMEOUT) {
-    same_test_timer = 0;
-    io.ledOff(1);
-    Serial.println("SAME_TEST_TIMEOUT");
-  }
+  // if (same_test_timer && millis() - same_test_timer > SAME_TEST_TIMEOUT) {
+  //   same_test_timer = 0;
+  //   io.ledOff(1);
+  //   Serial.println("SAME_TEST_TIMEOUT");
+  // }
 
   // timeout alerta
-  if (alert_state && millis() - alert_timer > ALERT_TIMEOUT) {
-    alert_timer = 0;
-    alertOff();
-    Serial.println("ALERT_TIMEOUT");
-  }
+  // if (alert_state && millis() - alert_timer > ALERT_TIMEOUT) {
+  //   alert_timer = 0;
+  //   alertOff();
+  //   Serial.println("ALERT_TIMEOUT");
+  // }
 
   // ---------------------------------------------------------------------------
 
@@ -187,7 +214,7 @@ void same_message() {
   if (msg[5] == 'R' &&
       msg[6] == 'W' &&
       msg[7] == 'T') {
-    same_test_timer = millis();
+    //same_test_timer = millis();
     io.ledOn(1);
     Serial.println("SAME_RWT");
   }
@@ -202,16 +229,20 @@ void same_reset() {
 
 // alerta
 void alertOn() {
-  alert_state = 1;
-  alert_timer = millis();
+  //alert_state = 1;
+  //alert_timer = millis();
   io.ledFast(0);
   io.relayOn();
   Serial.println("ALERT_ON");
 }
 
 void alertOff() {
-  alert_state = 0;
+  //alert_state = 0;
   io.ledSlow(0);
   io.relayOff();
   Serial.println("ALERT_OFF");
 }
+
+// Local Variables:
+// mode: c++
+// End:
