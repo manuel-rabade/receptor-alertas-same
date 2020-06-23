@@ -126,9 +126,9 @@ void loop() {
 
 void dumpVolume() {
   Serial.print("DUMP_VOLUME,");
-  Serial.print(config.getMute());
+  Serial.print(config.getVolume());
   Serial.print(",");
-  Serial.println(config.getVolume());
+  Serial.println(config.getMute());
 }
 
 void dumpAreaCodes() {
