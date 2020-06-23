@@ -234,7 +234,6 @@ boolean Config::_insertSorted(char* codes, byte len, byte* size, char* key) {
     int cmp = strncmp(val, key, len);
     // Serial.print(" cmp ");
     // Serial.print(cmp);
-
     if (cmp >= 0) {
       strncpy(&codes[(pos + 1) * len], &codes[pos * len], len);
       // Serial.println(" move ->");
