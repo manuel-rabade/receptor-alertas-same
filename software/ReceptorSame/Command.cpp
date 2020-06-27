@@ -99,8 +99,8 @@ void Command::clearBuffer() {
   _inputSize = 0;
 }
 
-static int Command::_compare(const void *cmp1, const void *cmp2) {
-     const struct cmd *cmd1 = cmp1;
-     const struct cmd *cmd2 = cmd2;
+static int Command::_compare(const void *a, const void *b) {
+     const struct cmd *cmd1 = a;
+     const struct cmd *cmd2 = b;
      return strcmp(cmd1->str, cmd2->str);
 }
