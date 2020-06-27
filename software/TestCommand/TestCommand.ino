@@ -23,6 +23,9 @@ void loop() {
     Serial.println(")");
     free(type);
 
+    Serial.print("getCmd: ");
+    Serial.println(cmd.getCmd());
+
     if (cmd.isArg()) {
       Serial.println("isArg");
 

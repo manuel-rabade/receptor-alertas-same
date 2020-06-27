@@ -1,5 +1,14 @@
 #include "Command.h"
 
+// tabla de comandos ordenada alfabeticamente
+struct cmd table[] = {
+  "GET_FREQUENCY", CMD_GET_FREQUENCY,
+  "GET_QUALITY", CMD_GET_QUALITY,
+  "LOAD_DEFAULTS", CMD_LOAD_DEFAULTS,
+  "SET_CHANNEL", CMD_SET_CHANNEL,
+  "SET_MUTE", CMD_SET_MUTE,
+};
+
 Command::Command() {
 
 }
@@ -37,6 +46,22 @@ char* Command::getType() {
   return res;
 }
 
+byte Command::getCmd() {
+  struct cmd *res;
+  char* type = getType();
+
+  struct cmd key = { type };
+  res = bsearch(&key, table, sizeof(table)/sizeof(table[0]),
+                sizeof table[0], _compare);
+  free(type);
+
+  if (res) {
+    return res->n;
+  } else {
+    return 0;
+  }
+}
+
 boolean Command::isArg() {
   if (strstr(_inputBuffer, COMMAND_SEP) == NULL) {
     return false;
@@ -72,4 +97,10 @@ byte Command::getArgByte() {
 void Command::clearBuffer() {
   memset(_inputBuffer,0,BUFFER_SIZE);
   _inputSize = 0;
+}
+
+static int Command::_compare(const void *cmp1, const void *cmp2) {
+     const struct cmd *cmd1 = cmp1;
+     const struct cmd *cmd2 = cmd2;
+     return strcmp(cmd1->str, cmd2->str);
 }
