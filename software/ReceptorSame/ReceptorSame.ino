@@ -3,8 +3,9 @@
 #include "Command.h"
 #include "Config.h"
 
-// parametors same
-#define SAME_CHANNELS 162400,162425,162450,162475,162500,162525,162550
+// configuración
+#define MEM_VERSION 0x04 // versión memoria
+#define SAME_CHANNELS 162400,162425,162450,162475,162500,162525,162550 // canales same (hertz)
 #define SAME_TIMEOUT 6000 // tiempo de espera maximo para recibir un mensaje same (segundos)
 
 // maquina de estados same
@@ -36,25 +37,14 @@ unsigned long same_timer = 0; // timeout mensaje same
 void setup() {
   // inicia puerto serial
   Serial.begin(9600);
-  Serial.println("SETUP");
+  Serial.println("STARTUP");
 
   // verificacion de memoria
   Serial.print("MEM_VERSION,");
   Serial.println(config.getVersion());
-  if (config.getVersion() != 0x02) {
-    Serial.println("LOAD_DEFAULTS");
-    config.setVersion(0x03);
-    config.setChannel(7);
-    config.setMute(true);
-    config.setVolume(63);
-    config.setAudio(2);
-    config.setRelay(3);
-    config.setRwtDuration(0);
-    config.setRmtDuration(0);
-    config.emptyAreaCodes();
-    config.emptyEventCodes();
-    Serial.println("MEM_SAVE");
-    config.save();
+  if (config.getVersion() != MEM_VERSION) {
+    defaults();
+    save();
   }
 
   // inicio si4707
@@ -74,21 +64,8 @@ void setup() {
     }
   }
 
-  // ajuste de mute y volumen
-  radio.setMuteVolume(config.getMute());
-  Serial.print("SET_MUTE,");
-  Serial.println(config.getMute());
-  config.setVolume(config.getVolume());
-  Serial.print("SET_VOLUME,");
-  Serial.println(config.getVolume());
-
-  // sintonizacion canal
-  if (radio.setWBFrequency(same_channels[config.getChannel() - 1])) {
-    Serial.print("TUNE_OK,");
-  } else {
-    Serial.print("TUNE_ERROR,");
-  }
-  Serial.println(config.getChannel());
+  // aplicar configuacion
+  update();
 }
 
 void loop() {
@@ -169,9 +146,10 @@ void loop() {
   // }
 
   // ---------------------------------------------------------------------------
-
+  //
   if (cmd.isReady()) {
-    char* type = cmd.getType();
+    commands();
+    cmd.clearBuffer();
   }
 
   if (io.isButtonTriggered()) {
@@ -184,8 +162,40 @@ void loop() {
   delay(50);
 }
 
+// aplicar la configuración
+void update() {
+  updateMute();
+  updateVolume();
+  updateChannel();
+}
+
+// ajuste de mute
+void updateMute() {
+  radio.setMuteVolume(config.getMute());
+  Serial.print("MUTE,");
+  Serial.println(config.getMute());
+}
+
+// ajuste de volumen
+void updateVolume() {
+  radio.setVolume(config.getVolume());
+  Serial.print("VOLUME,");
+  Serial.println(config.getVolume());
+}
+
+// sintonizar canal
+void updateChannel() {
+  if (radio.setWBFrequency(same_channels[config.getChannel() - 1])) {
+    Serial.print("TUNE_OK,");
+  } else {
+    Serial.print("TUNE_ERROR,");
+  }
+  Serial.println(config.getChannel());
+}
+
 // ---------------------------------------------------------------------------
-// procesamos mensaje same
+// mensajes same
+
 void same_message() {
   byte size = radio.getSAMESize();
   // ¿mensaje vacío?
@@ -210,6 +220,7 @@ void same_message() {
   }
   Serial.println();
 
+  // TODO: mensajes, alertas, etc
   // prueba periódica
   if (msg[5] == 'R' &&
       msg[6] == 'W' &&
@@ -241,6 +252,112 @@ void alertOff() {
   io.ledSlow(0);
   io.relayOff();
   Serial.println("ALERT_OFF");
+}
+
+// ---------------------------------------------------------------------------
+// configuración y comandos
+
+void defaults() {
+  Serial.println("SET_DEFAULTS");
+  config.setVersion(MEM_VERSION);
+  config.setChannel(7);
+  config.setMute(true);
+  config.setVolume(63);
+  config.setAudio(2);
+  config.setRelay(3);
+  config.setRwtDuration(0);
+  config.setRmtDuration(0);
+  config.emptyAreaCodes();
+  config.emptyEventCodes();
+}
+
+void save() {
+  Serial.println("MEM_SAVE");
+  config.save();
+}
+
+void commands() {
+  switch (cmd.getCmd()) {
+  case CMD_GET_FREQUENCY:
+    Serial.print("FREQUENCY,");
+    Serial.println((float) radio.getWBFrequency() * 0.0025, 4);
+    break;
+  case CMD_GET_QUALITY:
+    Serial.print("QUALITY,");
+    Serial.print(radio.getRSSI());
+    Serial.print(",");
+    Serial.println(radio.getSNR());
+    break;
+  case CMD_SET_CHANNEL:
+    if (cmd.isArg()) {
+      byte channel = cmd.getArgByte();
+      if (config.setChannel(channel)) {
+        updateChannel();
+        break;
+      }
+    }
+    Serial.println("SET_CHANNEL_ERROR");
+    break;
+  case CMD_SET_MUTE:
+    if (cmd.isArg()) {
+      byte mute = cmd.getArgByte();
+      if (mute == 1) {
+        config.setMute(true);
+        updateMute();
+        break;
+      } else if (mute == 0) {
+        config.setMute(false);
+        updateMute();
+        break;
+      }
+    }
+    Serial.println("SET_MUTE_ERROR");
+    break;
+  case CMD_SET_VOLUME:
+    if (cmd.isArg()) {
+      byte volume = cmd.getArgByte();
+      if (config.setVolume(volume)) {
+        updateVolume();
+        break;
+      }
+    }
+    Serial.println("SET_VOLUME_ERROR");
+    break;
+  case CMD_AUDIO_CONF:
+    break;
+  case CMD_RELAY_CONF:
+    break;
+  case CMD_RMT_TIMEOUT:
+    break;
+  case CMD_RWT_TIMEOUT:
+    break;
+  case CMD_LOAD_DEFAULTS:
+    defaults();
+    update();
+    break;
+  case CMD_RELOAD:
+    Serial.println("MEM_LOAD");
+    config.reload();
+    update();
+    break;
+  case CMD_SAVE:
+    save();
+    break;
+  case CMD_AREA_ADD:
+    break;
+  case CMD_AREA_DEL:
+    break;
+  case CMD_AREA_LIST:
+    break;
+  case CMD_EVENT_ADD:
+    break;
+  case CMD_EVENT_DEL:
+    break;
+  case CMD_EVENT_LIST:
+    break;
+  default:
+    Serial.println("UNKNOWN_CMD");
+  }
 }
 
 // Local Variables:
