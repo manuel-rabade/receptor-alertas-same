@@ -38,7 +38,7 @@ boolean Config::getMute() {
 }
 
 boolean Config::setVolume(byte volume) {
-  if (volume > 63) {
+  if (volume > 10) {
     return false;
   }
 
@@ -58,6 +58,7 @@ boolean Config::setAudio(byte audio) {
     return false;
   }
   _config.audio = audio;
+  return true;
 }
 
 byte Config::getAudio() {
@@ -69,26 +70,27 @@ boolean Config::setRelay(byte relay) {
     return false;
   }
   _config.relay = relay;
+  return true;
 }
 
 byte Config::getRelay() {
   return _config.relay;
 }
 
-void Config::setRwtDuration(unsigned int seconds) {
-  _config.rwtDuration = seconds;
+void Config::setRwtPeriod(unsigned int minutes) {
+  _config.rwtPeriod = minutes;
 }
 
-unsigned int Config::getRwtDuration() {
-  return _config.rwtDuration;
+unsigned int Config::getRwtPeriod() {
+  return _config.rwtPeriod;
 }
 
-void Config::setRmtDuration(unsigned int seconds) {
-  _config.rmtDuration = seconds;
+void Config::setRmtPeriod(unsigned int minutes) {
+  _config.rmtPeriod = minutes;
 }
 
-unsigned int Config::getRmtDuration() {
-  return _config.rmtDuration;
+unsigned int Config::getRmtPeriod() {
+  return _config.rmtPeriod;
 }
 
 // -------------------------------------------------------------------------------------------------

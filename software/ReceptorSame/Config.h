@@ -12,8 +12,8 @@ struct Memory {
   byte volume;
   byte audio;
   byte relay;
-  unsigned int rwtDuration;
-  unsigned int rmtDuration;
+  unsigned int rwtPeriod;
+  unsigned int rmtPeriod;
   char areaCodes[CODES_MAX][6];
   char eventCodes[CODES_MAX][3];
   byte areaCodesCount;
@@ -49,10 +49,10 @@ public:
   byte getAudio();
   boolean setRelay(byte);
   byte getRelay();
-  void setRwtDuration(unsigned int);
-  unsigned int getRwtDuration();
-  void setRmtDuration(unsigned int);
-  unsigned int getRmtDuration();
+  void setRwtPeriod(unsigned int);
+  unsigned int getRwtPeriod();
+  void setRmtPeriod(unsigned int);
+  unsigned int getRmtPeriod();
 
   // operación de codigos de area
   boolean setAreaCode(char*);
