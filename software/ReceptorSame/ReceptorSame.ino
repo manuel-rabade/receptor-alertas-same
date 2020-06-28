@@ -4,8 +4,7 @@
 #include "Config.h"
 
 // configuración
-#define MEM_VERSION 0x04 // versión memoria
-#define SAME_CHANNELS 162400,162425,162450,162475,162500,162525,162550 // canales same (hertz)
+#define CONFIG_VERSION 0x07 // versión memoria
 #define SAME_TIMEOUT 6000 // tiempo de espera maximo para recibir un mensaje same (segundos)
 
 // maquina de estados same
@@ -14,18 +13,28 @@
 #define SAME_HDR_DET 2
 #define SAME_HDR_RDY 3
 
+// constantes globales
+const unsigned long sameChannels[] = { // canales same (1 a 7) -> frecuencias radio (hertz)
+  162400, 162425, 162450,
+  162475, 162500, 162525,
+  162550
+};
+const byte radioVolumes[] = { // volumen configuración (0 a 10) -> volumen radio (0 a 63)
+  0, 6, 13, 19, 25, 32,
+  38, 44, 50, 57, 63
+};
+
 // objetos globales
 Si4707 radio;
 IO io;
 Command cmd;
 Config config;
 
-// constantes y variables globales
-const unsigned long same_channels[] = { SAME_CHANNELS }; // canales same
-boolean asq_prev_status = 0; // estado asq
-byte same_prev_state = 0; // estado same
-byte same_headers_count = 0; // conteo de cabeceras
-unsigned long same_timer = 0; // timeout mensaje same
+// variables globales
+boolean asqPrevStatus = 0; // estado asq
+byte samePrevState = 0; // estado same
+byte sameHeadersCount = 0; // conteo de cabeceras
+unsigned long sameTimer = 0; // timeout mensaje same
 
 // obsoleto
 // #define SAME_TEST_TIMEOUT 11400000 // 3 horas y 10 minutos
@@ -37,24 +46,24 @@ unsigned long same_timer = 0; // timeout mensaje same
 void setup() {
   // inicia puerto serial
   Serial.begin(9600);
-  Serial.println("STARTUP");
+  Serial.println(F("STARTUP"));
 
   // verificacion de memoria
-  Serial.print("MEM_VERSION,");
+  Serial.print(F("CONFIG_VERSION,"));
   Serial.println(config.getVersion());
-  if (config.getVersion() != MEM_VERSION) {
-    defaults();
-    save();
+  if (config.getVersion() != CONFIG_VERSION) {
+    configDefaults();
+    configSave();
   }
 
   // inicio si4707
   if (radio.begin()) {
-    Serial.println("SI4707_OK");
+    Serial.println(F("SI4707_OK"));
     // TODO: io.ledStartup
     io.ledSlow(0);
     io.ledOff(1);
   } else {
-    Serial.print("SI4707_ERROR");
+    Serial.print(F("SI4707_ERROR"));
     // TODO: io.ledSysError
     io.ledFast(0);
     io.ledFast(1);
@@ -65,69 +74,72 @@ void setup() {
   }
 
   // aplicar configuacion
-  update();
+  updateSettings();
+  Serial.println(F("RUN"));
 }
 
 void loop() {
   // monitoreo tono 1050 khz
-  boolean asq_status = radio.getASQ();
-  if (asq_prev_status != asq_status) {
-    if (asq_status) {
+  boolean asqStatus = radio.getASQ();
+  if (asqPrevStatus != asqStatus) {
+    if (asqStatus) {
       Serial.println("ASQ_ON");
+      // TODO
     } else {
       Serial.println("ASQ_OFF");
+      // TODO
     }
-    asq_prev_status = asq_status;
+    asqPrevStatus = asqStatus;
   }
 
   // recepción mensajes same
-  byte same_state = radio.getSAMEState();
-  if (same_prev_state != same_state) {
-    switch (same_state) {
+  byte sameState = radio.getSAMEState();
+  if (samePrevState != sameState) {
+    switch (sameState) {
     case SAME_EOM_DET:
       // fin del mensaje
       Serial.println("SAME_EOM_DET");
       // ¿se recibieron cabeceras?
-      if (same_headers_count > 0) {
-        same_message();
+      if (sameHeadersCount > 0) {
+        sameMessage();
       } else {
-        same_reset();
+        sameReset();
       }
       break;
     case SAME_PRE_DET:
       // preámbulo detectado
-      same_timer = millis();
+      sameTimer = millis();
       Serial.println("SAME_PRE_DET");
       break;
     case SAME_HDR_DET:
       // cabecera detectada
-      same_timer = millis();
+      sameTimer = millis();
       Serial.println("SAME_HDR_DET");
       break;
     case SAME_HDR_RDY:
       // cabecera lista
-      same_timer = millis();
-      same_headers_count++;
+      sameTimer = millis();
+      sameHeadersCount++;
       Serial.print("SAME_HDR_RDY,");
-      Serial.println(same_headers_count);
+      Serial.println(sameHeadersCount);
       break;
     }
     // ¿se recibieron tres cabeceras?
-    if (same_headers_count == 3) {
-      same_message();
+    if (sameHeadersCount == 3) {
+      sameMessage();
     }
-    same_prev_state = same_state;
+    samePrevState = sameState;
     return;
   }
 
   // timeout mensaje same
-  if (same_timer && millis() - same_timer > SAME_TIMEOUT) {
+  if (sameTimer && millis() - sameTimer > SAME_TIMEOUT) {
     Serial.println("SAME_TIMEOUT");
     // ¿se recibieron cabeceras?
-    if (same_headers_count > 0) {
-      same_message();
+    if (sameHeadersCount > 0) {
+      sameMessage();
     } else {
-      same_reset();
+      sameReset();
     }
   }
 
@@ -145,25 +157,28 @@ void loop() {
   //   Serial.println("ALERT_TIMEOUT");
   // }
 
-  // ---------------------------------------------------------------------------
-  //
+  // procesar comandos seriales
   if (cmd.isReady()) {
     commands();
     cmd.clearBuffer();
   }
 
+  // boton de usuario
   if (io.isButtonTriggered()) {
     Serial.println("BUTTON_TEST");
     alertOn();
   }
 
+  // refrescar leeds
   io.ledRefresh();
-
   delay(50);
 }
 
-// aplicar la configuración
-void update() {
+// ---------------------------------------------------------------------------
+// aplicar configuracion
+
+// todas las configuraciones
+void updateSettings() {
   updateMute();
   updateVolume();
   updateChannel();
@@ -172,23 +187,23 @@ void update() {
 // ajuste de mute
 void updateMute() {
   radio.setMuteVolume(config.getMute());
-  Serial.print("MUTE,");
+  Serial.print(F("MUTE,"));
   Serial.println(config.getMute());
 }
 
 // ajuste de volumen
 void updateVolume() {
-  radio.setVolume(config.getVolume());
-  Serial.print("VOLUME,");
+  radio.setVolume(radioVolumes[config.getVolume()]);
+  Serial.print(F("VOLUME,"));
   Serial.println(config.getVolume());
 }
 
 // sintonizar canal
 void updateChannel() {
-  if (radio.setWBFrequency(same_channels[config.getChannel() - 1])) {
-    Serial.print("TUNE_OK,");
+  if (radio.setWBFrequency(sameChannels[config.getChannel() - 1])) {
+    Serial.print(F("TUNE_OK,"));
   } else {
-    Serial.print("TUNE_ERROR,");
+    Serial.print(F("TUNE_ERROR,"));
   }
   Serial.println(config.getChannel());
 }
@@ -196,7 +211,7 @@ void updateChannel() {
 // ---------------------------------------------------------------------------
 // mensajes same
 
-void same_message() {
+void sameMessage() {
   byte size = radio.getSAMESize();
   // ¿mensaje vacío?
   if (size < 1) {
@@ -207,7 +222,7 @@ void same_message() {
   // adquisición mensaje
   byte msg[size];
   radio.getSAMEMessage(size, msg);
-  same_reset();
+  sameReset();
 
   // reportamos mensaje
   Serial.print("SAME_MESSAGE,");
@@ -232,10 +247,10 @@ void same_message() {
 }
 
 // reinicio buffer, timer y contador same
-void same_reset() {
+void sameReset() {
   radio.clearSAMEBuffer();
-  same_timer = 0;
-  same_headers_count = 0;
+  sameTimer = 0;
+  sameHeadersCount = 0;
 }
 
 // alerta
@@ -257,38 +272,19 @@ void alertOff() {
 // ---------------------------------------------------------------------------
 // configuración y comandos
 
-void defaults() {
-  Serial.println("SET_DEFAULTS");
-  config.setVersion(MEM_VERSION);
-  config.setChannel(7);
-  config.setMute(true);
-  config.setVolume(63);
-  config.setAudio(2);
-  config.setRelay(3);
-  config.setRwtDuration(0);
-  config.setRmtDuration(0);
-  config.emptyAreaCodes();
-  config.emptyEventCodes();
-}
-
-void save() {
-  Serial.println("MEM_SAVE");
-  config.save();
-}
-
 void commands() {
   switch (cmd.getCmd()) {
-  case CMD_GET_FREQUENCY:
-    Serial.print("FREQUENCY,");
+  case CMD_FREQUENCY:
+    Serial.print(F("FREQUENCY,"));
     Serial.println((float) radio.getWBFrequency() * 0.0025, 4);
     break;
-  case CMD_GET_QUALITY:
-    Serial.print("QUALITY,");
+  case CMD_QUALITY:
+    Serial.print(F("QUALITY,"));
     Serial.print(radio.getRSSI());
-    Serial.print(",");
+    Serial.print(F(","));
     Serial.println(radio.getSNR());
     break;
-  case CMD_SET_CHANNEL:
+  case CMD_CHANNEL:
     if (cmd.isArg()) {
       byte channel = cmd.getArgByte();
       if (config.setChannel(channel)) {
@@ -296,9 +292,9 @@ void commands() {
         break;
       }
     }
-    Serial.println("SET_CHANNEL_ERROR");
+    Serial.println(F("CHANNEL_ERROR"));
     break;
-  case CMD_SET_MUTE:
+  case CMD_MUTE:
     if (cmd.isArg()) {
       byte mute = cmd.getArgByte();
       if (mute == 1) {
@@ -311,9 +307,9 @@ void commands() {
         break;
       }
     }
-    Serial.println("SET_MUTE_ERROR");
+    Serial.println(F("MUTE_ERROR"));
     break;
-  case CMD_SET_VOLUME:
+  case CMD_VOLUME:
     if (cmd.isArg()) {
       byte volume = cmd.getArgByte();
       if (config.setVolume(volume)) {
@@ -321,42 +317,177 @@ void commands() {
         break;
       }
     }
-    Serial.println("SET_VOLUME_ERROR");
+    Serial.println(F("VOLUME_ERROR"));
     break;
-  case CMD_AUDIO_CONF:
+  case CMD_AUDIO:
+    if (cmd.isArg()) {
+      byte audio = cmd.getArgByte();
+      if (config.setAudio(audio)) {
+        // TODO
+        break;
+      }
+    }
+    Serial.println(F("AUDIO_ERROR"));
     break;
-  case CMD_RELAY_CONF:
+  case CMD_RELAY:
+    if (cmd.isArg()) {
+      byte relay = cmd.getArgByte();
+      if (config.setRelay(relay)) {
+        // TODO
+        break;
+      }
+    }
+    Serial.println(F("RELAY_ERROR"));
     break;
-  case CMD_RMT_TIMEOUT:
+  case CMD_RMT_PERIOD:
+    if (cmd.isArg()) {
+      unsigned int period = cmd.getArgUInt();
+      config.setRmtPeriod(period);
+      // TODO
+    } else {
+      Serial.println(F("RMT_PERIOD_ERROR"));
+    }
     break;
-  case CMD_RWT_TIMEOUT:
+  case CMD_RWT_PERIOD:
+    if (cmd.isArg()) {
+      unsigned int period = cmd.getArgUInt();
+      config.setRwtPeriod(period);
+      // TODO
+    } else {
+      Serial.println(F("RWT_PERIOD_ERROR"));
+    }
     break;
-  case CMD_LOAD_DEFAULTS:
-    defaults();
-    update();
+  case CMD_DEFAULTS:
+    configDefaults();
+    updateSettings();
     break;
   case CMD_RELOAD:
-    Serial.println("MEM_LOAD");
+    Serial.println(F("MEM_RELOAD"));
     config.reload();
-    update();
+    updateSettings();
     break;
   case CMD_SAVE:
-    save();
+    configSave();
+    break;
+  case CMD_DUMP:
+    configDump();
     break;
   case CMD_AREA_ADD:
+    if (!cmd.isArg()) {
+      Serial.println(F("AREA_ADD_ERROR"));
+    } else {
+      char* code = cmd.getArg();
+      if (config.setAreaCode(code)) {
+        Serial.print(F("AREA_ADD_OK,"));
+        Serial.println(code);
+      } else {
+        Serial.println(F("AREA_ADD_ERROR"));
+      }
+      free(code);
+    }
     break;
   case CMD_AREA_DEL:
-    break;
-  case CMD_AREA_LIST:
+    if (!cmd.isArg()) {
+      Serial.println(F("AREA_DEL_ERROR"));
+    } else {
+      char* code = cmd.getArg();
+      if (config.clearAreaCode(code)) {
+        Serial.print(F("AREA_DEL_OK,"));
+        Serial.println(code);
+      } else {
+        Serial.println(F("AREA_DEL_ERROR"));
+      }
+      free(code);
+    }
     break;
   case CMD_EVENT_ADD:
+    if (!cmd.isArg()) {
+      Serial.println(F("EVENT_ADD_ERROR"));
+    } else {
+      char* code = cmd.getArg();
+      if (config.setEventCode(code)) {
+        Serial.print(F("EVENT_ADD_OK,"));
+        Serial.println(code);
+      } else {
+        Serial.println(F("EVENT_ADD_ERROR"));
+      }
+      free(code);
+    }
     break;
   case CMD_EVENT_DEL:
-    break;
-  case CMD_EVENT_LIST:
+    if (!cmd.isArg()) {
+      Serial.println(F("EVENT_DEL_ERROR"));
+    } else {
+      char* code = cmd.getArg();
+      if (config.clearEventCode(code)) {
+        Serial.print(F("EVENT_DEL_OK,"));
+        Serial.println(code);
+      } else {
+        Serial.println(F("EVENT_DEL_ERROR"));
+      }
+      free(code);
+    }
     break;
   default:
-    Serial.println("UNKNOWN_CMD");
+    Serial.println(F("UNKNOWN_COMMAND"));
+  }
+}
+
+void configDefaults() {
+  Serial.println(F("CONFIG_DEFAULTS"));
+  config.setVersion(CONFIG_VERSION);
+  config.setChannel(7);
+  config.setMute(true);
+  config.setVolume(10);
+  config.setAudio(2);
+  config.setRelay(3);
+  config.setRwtPeriod(0);
+  config.setRmtPeriod(0);
+  config.emptyAreaCodes();
+  config.emptyEventCodes();
+}
+
+void configSave() {
+  Serial.println(F("MEM_SAVE"));
+  config.save();
+}
+
+void configDump() {
+  Serial.print(F("CONFIG_VERSION,"));
+  Serial.println(config.getVersion());
+  Serial.print(F("CONFIG_CHANNEL,"));
+  Serial.println(config.getChannel());
+  Serial.print(F("CONFIG_MUTE,"));
+  Serial.println(config.getMute());
+  Serial.print(F("CONFIG_VOLUME,"));
+  Serial.println(config.getVolume());
+  Serial.print(F("CONFIG_AUDIO,"));
+  Serial.println(config.getAudio());
+  Serial.print(F("CONFIG_RELAY,"));
+  Serial.println(config.getRelay());
+  Serial.print(F("CONFIG_RWT_PERIOD,"));
+  Serial.println(config.getRwtPeriod());
+  Serial.print(F("CONFIG_RMT_PERIOD,"));
+  Serial.println(config.getRmtPeriod());
+  Serial.print(F("CONFIG_AREA_CODES,"));
+  Serial.println(config.countAreaCodes());
+  for (byte idx = 0; idx < config.countAreaCodes(); idx++) {
+    Serial.print(F("CONFIG_AREA_CODE,"));
+    Serial.print(idx);
+    Serial.print(F(","));
+    char* code = config.strAreaCode(idx);
+    Serial.println(code);
+    free(code);
+  }
+  Serial.print(F("CONFIG_EVENT_CODES,"));
+  Serial.println(config.countEventCodes());
+  for (byte idx = 0; idx < config.countEventCodes(); idx++) {
+    Serial.print(F("CONFIG_EVENT_CODE,"));
+    Serial.print(idx);
+    Serial.print(F(","));
+    char* code = config.strEventCode(idx);
+    Serial.println(code);
+    free(code);
   }
 }
 
