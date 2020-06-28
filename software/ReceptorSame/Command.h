@@ -12,20 +12,21 @@
 #define CMD_AREA_DEL 8
 #define CMD_AREA_LIST 9
 #define CMD_AUDIO_CONF 10
+#define CMD_CHANNEL 1
+#define CMD_DEFAULTS 5
+#define CMD_DUMP 19
 #define CMD_EVENT_ADD 11
 #define CMD_EVENT_DEL 12
 #define CMD_EVENT_LIST 13
-#define CMD_GET_FREQUENCY 3
-#define CMD_GET_QUALITY 2
-#define CMD_LOAD_DEFAULTS 5
+#define CMD_FREQUENCY 3
+#define CMD_MUTE 4
+#define CMD_QUALITY 2
 #define CMD_RELAY_CONF 14
 #define CMD_RELOAD 18
-#define CMD_RMT_TIMEOUT 16
-#define CMD_RWT_TIMEOUT 15
+#define CMD_RMT_DURATION 16
+#define CMD_RWT_DURATION 15
 #define CMD_SAVE 6
-#define CMD_SET_CHANNEL 1
-#define CMD_SET_MUTE 4
-#define CMD_SET_VOLUME 17
+#define CMD_VOLUME 17
 
 struct cmd {
   char *str;
