@@ -20,8 +20,8 @@ void setup() {
     config.setVolume(50);
     config.setAudio(1);
     config.setRelay(3);
-    config.setRwtDuration(0);
-    config.setRmtDuration(0);
+    config.setRwtPeriod(0);
+    config.setRmtPeriod(0);
     config.emptyAreaCodes();
     testSetAreaCode("123456");
     dumpAreaCodes();
@@ -48,29 +48,33 @@ void setup() {
   Serial.println(config.getAudio());
   Serial.print("MEM_RELAY,");
   Serial.println(config.getRelay());
-  Serial.print("MEM_RWT_DURATION,");
-  Serial.println(config.getRwtDuration());
-  Serial.print("MEM_RMT_DURATION,");
-  Serial.println(config.getRmtDuration());
+  Serial.print("MEM_RWT_PERIOD,");
+  Serial.println(config.getRwtPeriod());
+  Serial.print("MEM_RMT_PERIOD,");
+  Serial.println(config.getRmtPeriod());
   dumpAreaCodes();
   dumpEventCodes();
   Serial.println("DUMP_END");
 
   Serial.println("TEST_AREA_CODES_START");
   config.emptyAreaCodes();
-  testSetAreaCode("YZ-123"); // 5
-  testSetAreaCode("MNOPQR"); // 3
-  testSetAreaCode("GHIJKL"); // 2
-  testSetAreaCode("STUVWX"); // 4
-  testSetAreaCode("ABCDEF"); // 1
-  testSetAreaCode("STUVWX"); // error
+  testSetAreaCode("555555"); // 5
+  testSetAreaCode("333333"); // 3
+  testSetAreaCode("222222"); // 2
+  testSetAreaCode("444444"); // 4
+  testSetAreaCode("000000"); // 1
+  testSetAreaCode("567890"); // 6
+  testSetAreaCode("333333"); // error
   dumpAreaCodes();
-  testFindAreaCode("GHIJKL");
+  testFindAreaCode("555555");
   testFindAreaCode("      ");
-  testFindAreaCode("QWERTY");
-  testClearAreaCode("STUVWX");
+  testFindAreaCode("111111");
+  testFindAreaCode("033333"); // comodin area code
+  testFindAreaCode("900000"); // comodin area code
+  testFindAreaCode("088888"); // comodin area code
+  testClearAreaCode("444444");
   testClearAreaCode("      ");
-  testClearAreaCode("ASDFGH");
+  testClearAreaCode("666666");
   dumpAreaCodes();
   Serial.println("TEST_AREA_CODES_END");
 
@@ -147,7 +151,7 @@ void dumpAreaCodes() {
 void testFindAreaCode(char code[3]) {
   Serial.print("FIND_AREA,");
   Serial.println(code);
-  if (config.findAreaCode(code)) {
+  if (config.findAreaCodeWildcard(code)) {
     Serial.println("AREA_FOUND");
   } else {
     Serial.println("AREA_NOT_FOUND");
