@@ -51,13 +51,16 @@ public:
   byte getRelay();
   void setRwtPeriod(unsigned int);
   unsigned int getRwtPeriod();
+  unsigned long getRwtPeriodMillis();
   void setRmtPeriod(unsigned int);
   unsigned int getRmtPeriod();
+  unsigned long getRmtPeriodMillis();
 
   // operación de codigos de area
   boolean setAreaCode(char*);
   boolean clearAreaCode(char*);
   boolean findAreaCode(char*);
+  boolean findAreaCodeWildcard(char*);
   byte countAreaCodes();
   char* strAreaCode(byte);
   void emptyAreaCodes();

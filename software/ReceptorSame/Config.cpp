@@ -85,12 +85,20 @@ unsigned int Config::getRwtPeriod() {
   return _config.rwtPeriod;
 }
 
+unsigned long Config::getRwtPeriodMillis() {
+  return _config.rwtPeriod * 60 * 1000; // segundos a milisegundos
+}
+
 void Config::setRmtPeriod(unsigned int minutes) {
   _config.rmtPeriod = minutes;
 }
 
 unsigned int Config::getRmtPeriod() {
   return _config.rmtPeriod;
+}
+
+unsigned long Config::getRmtPeriodMillis() {
+  return _config.rmtPeriod * 60 * 1000; // segundos a milisegundos
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -113,6 +121,27 @@ boolean Config::findAreaCode(char* code) {
   }
 
   return true;
+}
+
+boolean Config::findAreaCodeWildcard(char* code) {
+  if (code[0] == '0') {
+    for (byte i = 0; i < 10; i++) {
+      if (_binarySearch(_config.areaCodes[0], 6, 0, _config.areaCodesCount, _config.areaCodesCount, code) > -1) {
+        return true;
+      }
+      code[0]++;
+    }
+  } else {
+    if (_binarySearch(_config.areaCodes[0], 6, 0, _config.areaCodesCount, _config.areaCodesCount, code) > -1) {
+      return true;
+    }
+    code[0] = '0';
+    if (_binarySearch(_config.areaCodes[0], 6, 0, _config.areaCodesCount, _config.areaCodesCount, code) > -1) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 char* Config::strAreaCode(byte idx) {
