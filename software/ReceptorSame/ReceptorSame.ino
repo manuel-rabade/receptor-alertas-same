@@ -34,7 +34,12 @@ Config config;
 boolean asqPrevStatus = 0; // estado asq
 byte samePrevState = 0; // estado same
 byte sameHeadersCount = 0; // conteo de cabeceras
-unsigned long sameTimer = 0; // timeout mensaje same
+boolean sameTimerEnabled = false;  // timer mensaje same
+unsigned long sameTimer = 0;
+boolean sameRwtEnabled = false;  // timer prueba semanal
+unsigned long sameRwtTimer = 0;
+boolean sameRmtEnabled = false;  // timer prueba mensual
+unsigned long sameRmtTimer = 0;
 
 // obsoleto
 // #define SAME_TEST_TIMEOUT 11400000 // 3 horas y 10 minutos
@@ -108,17 +113,17 @@ void loop() {
       break;
     case SAME_PRE_DET:
       // preámbulo detectado
-      sameTimer = millis();
+      sameRefreshTimer();
       Serial.println("SAME_PRE_DET");
       break;
     case SAME_HDR_DET:
       // cabecera detectada
-      sameTimer = millis();
+      sameRefreshTimer();
       Serial.println("SAME_HDR_DET");
       break;
     case SAME_HDR_RDY:
       // cabecera lista
-      sameTimer = millis();
+      sameRefreshTimer();
       sameHeadersCount++;
       Serial.print("SAME_HDR_RDY,");
       Serial.println(sameHeadersCount);
@@ -133,7 +138,7 @@ void loop() {
   }
 
   // timeout mensaje same
-  if (sameTimer && millis() - sameTimer > SAME_TIMEOUT) {
+  if (sameTimerEnabled && millis() - sameTimer > SAME_TIMEOUT) {
     Serial.println("SAME_TIMEOUT");
     // ¿se recibieron cabeceras?
     if (sameHeadersCount > 0) {
@@ -143,19 +148,21 @@ void loop() {
     }
   }
 
-  // timeout prueba same
-  // if (same_test_timer && millis() - same_test_timer > SAME_TEST_TIMEOUT) {
-  //   same_test_timer = 0;
-  //   io.ledOff(1);
-  //   Serial.println("SAME_TEST_TIMEOUT");
-  // }
+  // timeout prueba semanal
+  if (sameRwtEnabled && millis() - sameRwtTimer > config.getRwtPeriodMillis()) {
+    sameRwtEnabled = false;
+    sameRwtTimer = 0;
+    Serial.println("SAME_RWT_TIMEOUT");
+  }
 
-  // timeout alerta
-  // if (alert_state && millis() - alert_timer > ALERT_TIMEOUT) {
-  //   alert_timer = 0;
-  //   alertOff();
-  //   Serial.println("ALERT_TIMEOUT");
-  // }
+  // timeout prueba mensual
+
+  // actualizamos led prueba
+  if (sameRwtEnabled || sameRmtEnabled) {
+    // ledTestOn
+  } else {
+    // ledTestOff
+  }
 
   // procesar comandos seriales
   if (cmd.isReady()) {
@@ -235,20 +242,49 @@ void sameMessage() {
   }
   Serial.println();
 
-  // TODO: mensajes, alertas, etc
-  // prueba periódica
-  if (msg[5] == 'R' &&
-      msg[6] == 'W' &&
-      msg[7] == 'T') {
-    //same_test_timer = millis();
-    io.ledOn(1);
-    Serial.println("SAME_RWT");
+  // buscamos en filtros de eventos y areas geograficas
+  char event[3] = { msg[5], msg[6], msg[7] };
+  char area[6] = { msg[9], msg[10], msg[11], msg[12], msg[13], msg[14]  };
+
+  // filtramos codigo de area
+  if (config.countAreaCodes() > 0 && !config.findAreaCodeWildcard(area)) {
+    Serial.println("SAME_IGNORE_AREA");
+    return;
   }
+
+  // mensaje de prueba
+  if (event == 'RWT') {
+    Serial.println("SAME_RWT");
+    sameRwtEnabled = true;
+    sameRwtTimer = millis();
+    return;
+  } else if (event == 'RMT') {
+    Serial.println("SAME_RMT");
+    sameRmtEnabled = true;
+    sameRmtTimer = millis();
+    return;
+  }
+
+  // filtramos codigo de evento
+  if (config.countEventCodes() > 0 && !config.findEventCode(event)) {
+    Serial.println("SAME_IGNORE_EVENT");
+    return;
+  }
+
+  // disparamos alerta
+  // TODO
+  Serial.println("SAME_ALERT");
+}
+
+void sameRefreshTimer() {
+  sameTimerEnabled = true;
+  sameTimer = millis();
 }
 
 // reinicio buffer, timer y contador same
 void sameReset() {
   radio.clearSAMEBuffer();
+  sameTimerEnabled = false;
   sameTimer = 0;
   sameHeadersCount = 0;
 }
