@@ -68,6 +68,31 @@ void IO::ledFast(byte n) {
   _ledUpdate(n, !_ledsState[n]);
 }
 
+void IO::ledsBegin() {
+  ledOn(0);
+  ledOn(1);
+}
+
+void IO::ledsError() {
+  ledFast(0);
+  ledOff(1);
+}
+
+void IO::ledsWait() {
+  ledSlow(0);
+  ledOff(1);
+}
+
+void IO::ledsWaitRT() {
+  ledSlow(0);
+  ledOn(1);
+}
+
+void IO::ledsAlert() {
+  ledFast(0);
+  ledFast(1);
+}
+
 void IO::ledRefresh() {
   for (byte n = 0; n < 2; n++) {
     // tiempo de parpadeo

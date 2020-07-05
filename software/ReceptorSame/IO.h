@@ -58,12 +58,19 @@ class IO {
   // boton
   boolean isButtonTriggered();
 
-  // leds
+  // led
   void ledOn(byte);
   void ledOff(byte);
   void ledSlow(byte);
   void ledFast(byte);
   void ledRefresh();
+
+  // leds
+  void ledsBegin();
+  void ledsError();
+  void ledsWait();
+  void ledsWaitRT();
+  void ledsAlert();
 
   // relay
   void relayOn();
