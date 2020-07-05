@@ -93,7 +93,7 @@ void IO::ledsAlert() {
   ledFast(1);
 }
 
-void IO::ledRefresh() {
+void IO::ledsRefresh() {
   for (byte n = 0; n < 2; n++) {
     // tiempo de parpadeo
     unsigned long blink_time = 0;

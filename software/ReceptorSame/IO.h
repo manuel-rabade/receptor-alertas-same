@@ -63,9 +63,9 @@ class IO {
   void ledOff(byte);
   void ledSlow(byte);
   void ledFast(byte);
-  void ledRefresh();
 
   // leds
+  void ledsRefresh();
   void ledsBegin();
   void ledsError();
   void ledsWait();
