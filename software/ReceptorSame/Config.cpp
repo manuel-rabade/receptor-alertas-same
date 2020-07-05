@@ -54,7 +54,7 @@ byte Config::getVolume() {
 }
 
 boolean Config::setAudio(byte audio) {
-  if (audio > 2) {
+  if (audio > 1) {
     return false;
   }
   _config.audio = audio;
