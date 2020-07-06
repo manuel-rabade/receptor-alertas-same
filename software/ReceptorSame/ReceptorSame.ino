@@ -1,10 +1,14 @@
 #include "Si4707.h"
+#include "MockRadio.h"
 #include "IO.h"
 #include "Command.h"
 #include "Config.h"
 
+// pruebas de integracion del sistema
+#define MOCKRADIO 2
+
 // configuración
-#define CONFIG_VERSION 0x07 // versión memoria
+#define CONFIG_VERSION 0x08 // versión memoria
 #define SAME_TIMEOUT 6000 // tiempo de espera maximo para recibir un mensaje same (segundos)
 
 // maquina de estados same
@@ -24,8 +28,14 @@ const byte radioVolumes[] = { // volumen configuración (0 a 10) -> volumen radi
   38, 44, 50, 57, 63
 };
 
-// objetos globales
+// radio
+#ifndef MOCKRADIO
 Si4707 radio;
+#else
+MockRadio radio; // radio simulado
+#endif
+
+// objetos globales
 IO io;
 Command cmd;
 Config config;
@@ -36,19 +46,19 @@ byte samePrevState = 0; // estado same
 byte sameHeadersCount = 0; // conteo de cabeceras
 boolean sameTimerEnabled = false;  // timer mensaje same
 unsigned long sameTimer = 0;
+boolean sameAlert = false;
+boolean testAlert = false;
+
+// pruebas same
 boolean sameRwtEnabled = false;  // timer prueba semanal
 unsigned long sameRwtTimer = 0;
 boolean sameRmtEnabled = false;  // timer prueba mensual
 unsigned long sameRmtTimer = 0;
 
-// obsoleto
-// #define SAME_TEST_TIMEOUT 11400000 // 3 horas y 10 minutos
-// #define ALERT_TIMEOUT 60000 // 1 minuto
-// unsigned long same_test_timer;
-// boolean alert_state;
-// unsigned long alert_timer;
-
 void setup() {
+  // inicio leds
+  io.ledsBegin();
+
   // inicia puerto serial
   Serial.begin(9600);
   Serial.println(F("STARTUP"));
@@ -61,38 +71,46 @@ void setup() {
     configSave();
   }
 
+  // radio simulado
+#ifdef MOCKRADIO
+  radio.test(MOCKRADIO);
+#endif
+
   // inicio si4707
   if (radio.begin()) {
     Serial.println(F("SI4707_OK"));
-    // TODO: io.ledStartup
-    io.ledSlow(0);
-    io.ledOff(1);
   } else {
     Serial.print(F("SI4707_ERROR"));
-    // TODO: io.ledSysError
-    io.ledFast(0);
-    io.ledFast(1);
+    io.ledsError();
     while (1) {
-      io.ledRefresh();
+      io.ledsRefresh();
       delay(50);
     }
   }
 
   // aplicar configuacion
   updateSettings();
+  io.ledsWait();
   Serial.println(F("RUN"));
 }
 
 void loop() {
-  // monitoreo tono 1050 khz
+  // monitor tono 1050 khz
   boolean asqStatus = radio.getASQ();
   if (asqPrevStatus != asqStatus) {
     if (asqStatus) {
       Serial.println("ASQ_ON");
-      // TODO
+      if (sameAlert && config.getAudio() == 1) {
+        Serial.println("AUDIO_ON");
+        config.setMute(false);
+      }
+      if (sameAlert && config.getRelay() == 2) {
+        Serial.println("RELAY_ON");
+        io.relayOn();
+      }
+      sameReset();
     } else {
       Serial.println("ASQ_OFF");
-      // TODO
     }
     asqPrevStatus = asqStatus;
   }
@@ -104,12 +122,7 @@ void loop() {
     case SAME_EOM_DET:
       // fin del mensaje
       Serial.println("SAME_EOM_DET");
-      // ¿se recibieron cabeceras?
-      if (sameHeadersCount > 0) {
-        sameMessage();
-      } else {
-        sameReset();
-      }
+      sameEnd();
       break;
     case SAME_PRE_DET:
       // preámbulo detectado
@@ -127,21 +140,20 @@ void loop() {
       sameHeadersCount++;
       Serial.print("SAME_HDR_RDY,");
       Serial.println(sameHeadersCount);
+      // ¿se recibieron 3 cabeceras?
+      if (sameHeadersCount == 3) {
+        sameMessage();
+      }
       break;
     }
-    // ¿se recibieron tres cabeceras?
-    if (sameHeadersCount == 3) {
-      sameMessage();
-    }
     samePrevState = sameState;
-    return;
   }
 
   // timeout mensaje same
   if (sameTimerEnabled && millis() - sameTimer > SAME_TIMEOUT) {
     Serial.println("SAME_TIMEOUT");
-    // ¿se recibieron cabeceras?
-    if (sameHeadersCount > 0) {
+    // ¿se recibieron al menos 2 cabeceras?
+    if (sameHeadersCount > 1) {
       sameMessage();
     } else {
       sameReset();
@@ -153,15 +165,15 @@ void loop() {
     sameRwtEnabled = false;
     sameRwtTimer = 0;
     Serial.println("SAME_RWT_TIMEOUT");
+    io.ledsWait();
   }
 
   // timeout prueba mensual
-
-  // actualizamos led prueba
-  if (sameRwtEnabled || sameRmtEnabled) {
-    // ledTestOn
-  } else {
-    // ledTestOff
+  if (sameRmtEnabled && millis() - sameRmtTimer > config.getRmtPeriodMillis()) {
+    sameRmtEnabled = false;
+    sameRmtTimer = 0;
+    Serial.println("SAME_RMT_TIMEOUT");
+    io.ledsWait();
   }
 
   // procesar comandos seriales
@@ -172,13 +184,153 @@ void loop() {
 
   // boton de usuario
   if (io.isButtonTriggered()) {
-    Serial.println("BUTTON_TEST");
-    alertOn();
+    Serial.println("BUTTON_TRIGGERED");
+    if (sameAlert) {
+      if (config.getRelay() == 3) {
+        Serial.println("RELAY_OFF");
+        io.relayOff();
+        Serial.println("SAME_ALERT_OFF");
+        sameAlert = false;
+        if (sameRwtEnabled || sameRwtEnabled) {
+          io.ledsWaitRT();
+        } else {
+          io.ledsWait();
+        }
+      }
+    } else {
+      if (testAlert) {
+         Serial.println("TEST_ALERT_OFF");
+        testAlert = false;
+        if (config.getAudio() > 0) {
+          Serial.println("AUDIO_OFF");
+          config.setMute(true);
+        }
+        if (config.getRelay() > 0) {
+          Serial.println("RELAY_OFF");
+          io.relayOff();
+        }
+      } else {
+        Serial.println("TEST_ALERT_ON");
+        testAlert = true;
+        if (config.getAudio() > 0) {
+          Serial.println("AUDIO_ON");
+          config.setMute(false);
+        }
+        if (config.getRelay() > 0) {
+          Serial.println("RELAY_ON");
+          io.relayOn();
+        }
+      }
+    }
   }
 
-  // refrescar leeds
-  io.ledRefresh();
+  // refrescar leds
+  io.ledsRefresh();
   delay(50);
+}
+
+// ---------------------------------------------------------------------------
+// same
+
+// procesar mensaje same
+void sameMessage() {
+  byte size = radio.getSAMESize();
+  // ¿mensaje vacío?
+  if (size < 1) {
+    Serial.println("SAME_EMPTY");
+    return;
+  }
+
+  // adquisición mensaje
+  byte msg[size];
+  radio.getSAMEMessage(size, msg);
+  sameReset();
+
+  // reportamos mensaje
+  Serial.print("SAME_MESSAGE,");
+  for (byte i = 0; i < size; i++) {
+    if (msg[i] > 31 && msg[i] < 127) {
+      Serial.write(msg[i]);
+    } else {
+      Serial.print(".");
+    }
+  }
+  Serial.println();
+
+  // información del mensaje
+  char event[3] = { msg[5], msg[6], msg[7] };
+  char area[6] = { msg[9], msg[10], msg[11], msg[12], msg[13], msg[14]  };
+
+  // filtramos codigo de area
+  if (config.countAreaCodes() > 0 && !config.findAreaCodeWildcard(area)) {
+    Serial.println("SAME_IGNORE_AREA");
+    return;
+  }
+
+  // mensaje de prueba
+  if (strncmp(event, 'RWT', 3) == 0) {
+    sameRwtEnabled = true;
+    sameRwtTimer = millis();
+    Serial.println("SAME_RWT");
+    if (config.getRwtPeriod() > 0) {
+      io.ledsWaitRT();
+    }
+    return;
+  } else if (strncmp(event, 'RMT', 3) == 0) {
+    sameRmtEnabled = true;
+    sameRmtTimer = millis();
+    Serial.println("SAME_RMT");
+    if (config.getRmtPeriod() > 0) {
+      io.ledsWaitRT();
+    }
+    return;
+  }
+
+  // filtramos codigo de evento
+  if (config.countEventCodes() > 0 && !config.findEventCode(event)) {
+    Serial.println("SAME_IGNORE_EVENT");
+    return;
+  }
+
+  // disparamos alerta
+  Serial.println("SAME_ALERT_ON");
+  sameAlert = true;
+  io.ledsAlert();
+  if (config.getRelay() >= 2) {
+    Serial.println("RELAY_ON");
+    io.relayOn();
+  }
+}
+
+// fin mensaje same
+void sameEnd() {
+  if (sameAlert && config.getAudio() == 1) {
+    Serial.println("AUDIO_OFF");
+    config.setMute(true);
+  }
+  if (sameAlert && (config.getRelay() == 1 || config.getRelay() == 2)) {
+    Serial.println("RELAY_OFF");
+    io.relayOff();
+  }
+  if (config.getRelay() < 3) {
+    Serial.println("SAME_ALERT_OFF");
+    sameAlert = false;
+  }
+  sameReset();
+}
+
+// actualizar timer same
+void sameRefreshTimer() {
+  sameTimerEnabled = true;
+  sameTimer = millis();
+}
+
+// reiniciar buffer, timer y contador same
+void sameReset() {
+  radio.clearSAMEBuffer();
+  sameTimerEnabled = false;
+  sameTimer = 0;
+  sameHeadersCount = 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -213,96 +365,6 @@ void updateChannel() {
     Serial.print(F("TUNE_ERROR,"));
   }
   Serial.println(config.getChannel());
-}
-
-// ---------------------------------------------------------------------------
-// mensajes same
-
-void sameMessage() {
-  byte size = radio.getSAMESize();
-  // ¿mensaje vacío?
-  if (size < 1) {
-    Serial.println("SAME_EMPTY");
-    return;
-  }
-
-  // adquisición mensaje
-  byte msg[size];
-  radio.getSAMEMessage(size, msg);
-  sameReset();
-
-  // reportamos mensaje
-  Serial.print("SAME_MESSAGE,");
-  for (byte i = 0; i < size; i++) {
-    if (msg[i] > 31 && msg[i] < 127) {
-      Serial.write(msg[i]);
-    } else {
-      Serial.print(".");
-    }
-  }
-  Serial.println();
-
-  // buscamos en filtros de eventos y areas geograficas
-  char event[3] = { msg[5], msg[6], msg[7] };
-  char area[6] = { msg[9], msg[10], msg[11], msg[12], msg[13], msg[14]  };
-
-  // filtramos codigo de area
-  if (config.countAreaCodes() > 0 && !config.findAreaCodeWildcard(area)) {
-    Serial.println("SAME_IGNORE_AREA");
-    return;
-  }
-
-  // mensaje de prueba
-  if (event == 'RWT') {
-    Serial.println("SAME_RWT");
-    sameRwtEnabled = true;
-    sameRwtTimer = millis();
-    return;
-  } else if (event == 'RMT') {
-    Serial.println("SAME_RMT");
-    sameRmtEnabled = true;
-    sameRmtTimer = millis();
-    return;
-  }
-
-  // filtramos codigo de evento
-  if (config.countEventCodes() > 0 && !config.findEventCode(event)) {
-    Serial.println("SAME_IGNORE_EVENT");
-    return;
-  }
-
-  // disparamos alerta
-  // TODO
-  Serial.println("SAME_ALERT");
-}
-
-void sameRefreshTimer() {
-  sameTimerEnabled = true;
-  sameTimer = millis();
-}
-
-// reinicio buffer, timer y contador same
-void sameReset() {
-  radio.clearSAMEBuffer();
-  sameTimerEnabled = false;
-  sameTimer = 0;
-  sameHeadersCount = 0;
-}
-
-// alerta
-void alertOn() {
-  //alert_state = 1;
-  //alert_timer = millis();
-  io.ledFast(0);
-  io.relayOn();
-  Serial.println("ALERT_ON");
-}
-
-void alertOff() {
-  //alert_state = 0;
-  io.ledSlow(0);
-  io.relayOff();
-  Serial.println("ALERT_OFF");
 }
 
 // ---------------------------------------------------------------------------
@@ -359,7 +421,8 @@ void commands() {
     if (cmd.isArg()) {
       byte audio = cmd.getArgByte();
       if (config.setAudio(audio)) {
-        // TODO
+        Serial.print(F("AUDIO,"));
+        Serial.println(audio);
         break;
       }
     }
@@ -369,28 +432,31 @@ void commands() {
     if (cmd.isArg()) {
       byte relay = cmd.getArgByte();
       if (config.setRelay(relay)) {
-        // TODO
+        Serial.print(F("RELAY,"));
+        Serial.println(relay);
         break;
       }
     }
     Serial.println(F("RELAY_ERROR"));
     break;
-  case CMD_RMT_PERIOD:
-    if (cmd.isArg()) {
-      unsigned int period = cmd.getArgUInt();
-      config.setRmtPeriod(period);
-      // TODO
-    } else {
-      Serial.println(F("RMT_PERIOD_ERROR"));
-    }
-    break;
   case CMD_RWT_PERIOD:
     if (cmd.isArg()) {
       unsigned int period = cmd.getArgUInt();
       config.setRwtPeriod(period);
-      // TODO
+      Serial.print(F("RWT_PERIOD,"));
+      Serial.println(period);
     } else {
       Serial.println(F("RWT_PERIOD_ERROR"));
+    }
+    break;
+  case CMD_RMT_PERIOD:
+    if (cmd.isArg()) {
+      unsigned int period = cmd.getArgUInt();
+      config.setRmtPeriod(period);
+      Serial.print(F("RMT_PERIOD,"));
+      Serial.println(period);
+    } else {
+      Serial.println(F("RMT_PERIOD_ERROR"));
     }
     break;
   case CMD_DEFAULTS:
@@ -475,7 +541,7 @@ void configDefaults() {
   config.setChannel(7);
   config.setMute(true);
   config.setVolume(10);
-  config.setAudio(2);
+  config.setAudio(1);
   config.setRelay(3);
   config.setRwtPeriod(0);
   config.setRmtPeriod(0);
