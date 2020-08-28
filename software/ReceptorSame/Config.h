@@ -12,8 +12,8 @@ struct Memory {
   byte volume;
   byte audio;
   byte relay;
-  unsigned int rwtPeriod;
-  unsigned int rmtPeriod;
+  unsigned long rwtPeriod; // millis
+  unsigned long rmtPeriod; // millis
   char areaCodes[CODES_MAX][6];
   char eventCodes[CODES_MAX][3];
   byte areaCodesCount;

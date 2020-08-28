@@ -54,7 +54,7 @@ byte Config::getVolume() {
 }
 
 boolean Config::setAudio(byte audio) {
-  if (audio > 1) {
+  if (audio > 2) {
     return false;
   }
   _config.audio = audio;
@@ -78,27 +78,27 @@ byte Config::getRelay() {
 }
 
 void Config::setRwtPeriod(unsigned int minutes) {
-  _config.rwtPeriod = minutes;
+  _config.rwtPeriod = minutes * 60000; // minutos a millis
 }
 
 unsigned int Config::getRwtPeriod() {
-  return _config.rwtPeriod;
+  return _config.rwtPeriod / 60000; // millis a minutos
 }
 
 unsigned long Config::getRwtPeriodMillis() {
-  return _config.rwtPeriod * 60 * 1000; // segundos a milisegundos
+  return _config.rwtPeriod; // millis
 }
 
 void Config::setRmtPeriod(unsigned int minutes) {
-  _config.rmtPeriod = minutes;
+  _config.rmtPeriod = minutes * 60000; // minutos a millis
 }
 
 unsigned int Config::getRmtPeriod() {
-  return _config.rmtPeriod;
+  return _config.rmtPeriod / 60000; // millis a minutos
 }
 
 unsigned long Config::getRmtPeriodMillis() {
-  return _config.rmtPeriod * 60 * 1000; // segundos a milisegundos
+  return _config.rmtPeriod; // millis
 }
 
 // -------------------------------------------------------------------------------------------------
