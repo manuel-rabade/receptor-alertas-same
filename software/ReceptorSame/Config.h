@@ -10,7 +10,6 @@ struct Memory {
   byte version;
   byte channel;
   byte volume;
-  byte audio;
   byte relay;
   unsigned long rwtPeriod; // millis
   unsigned long rmtPeriod; // millis
@@ -45,8 +44,6 @@ public:
   boolean getMute();
   boolean setVolume(byte);
   byte getVolume();
-  boolean setAudio(byte);
-  byte getAudio();
   boolean setRelay(byte);
   byte getRelay();
   void setRwtPeriod(unsigned int);

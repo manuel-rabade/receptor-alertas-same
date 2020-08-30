@@ -53,18 +53,6 @@ byte Config::getVolume() {
   return volume;
 }
 
-boolean Config::setAudio(byte audio) {
-  if (audio > 2) {
-    return false;
-  }
-  _config.audio = audio;
-  return true;
-}
-
-byte Config::getAudio() {
-  return _config.audio;
-}
-
 boolean Config::setRelay(byte relay) {
   if (relay > 3) {
     return false;

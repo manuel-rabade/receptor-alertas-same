@@ -18,7 +18,6 @@ void setup() {
     config.setChannel(7);
     config.setMute(false);
     config.setVolume(50);
-    config.setAudio(1);
     config.setRelay(3);
     config.setRwtPeriod(0);
     config.setRmtPeriod(0);
@@ -44,8 +43,6 @@ void setup() {
   Serial.println(config.getMute());
   Serial.print("MEM_VOLUME,");
   Serial.println(config.getVolume());
-  Serial.print("MEM_AUDIO,");
-  Serial.println(config.getAudio());
   Serial.print("MEM_RELAY,");
   Serial.println(config.getRelay());
   Serial.print("MEM_RWT_PERIOD,");
