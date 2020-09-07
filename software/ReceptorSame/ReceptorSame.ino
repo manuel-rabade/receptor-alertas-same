@@ -15,7 +15,7 @@
 #define SAME_HDR_RDY 3
 
 // constantes globales
-fconst unsigned long sameChannels[] = { // canales same (1 a 7) -> frecuencias radio (hertz)
+const unsigned long sameChannels[] = { // canales same (1 a 7) -> frecuencias radio (hertz)
   162400, 162425, 162450, 162475, 162500, 162525, 162550 };
 const byte radioVolumes[] = { // volumen configuración (0 a 10) -> volumen radio (0 a 63)
   0, 6, 13, 19, 25, 32, 38, 44, 50, 57, 63 };
