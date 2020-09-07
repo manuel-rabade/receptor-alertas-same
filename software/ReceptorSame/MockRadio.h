@@ -19,10 +19,8 @@ class MockRadio {
 private:
   byte _case;
   byte _step;
-  byte _state;
   unsigned long _updated;
-  unsigned long _paused;
-  boolean _fsm(byte, byte, unsigned int, unsigned int);
+  boolean _fsm(byte, unsigned int);
 
 public:
   MockRadio();
