@@ -3,16 +3,29 @@
 
 #include <Arduino.h>
 
+// #define MOCKRADIO 1 // falla si4707
+
+// #define MOCKRADIO 2 // mensaje de prueba
+// #define MOCKMSG "-CIV-RWT-000000+0300-832300-XDIF/005-....."
+// #define MOCKMSG "-CIV-RMT-000000+0300-832300-XDIF/005-....."
+
+// #define MOCKRADIO 3 // mensaje de alerta con voz sin tono asq
+// #define MOCKMSG "-WXR-SPS-039173-039051-139069+0030-1591829-KCLE/NWS-"
+
+#define MOCKRADIO 4 // mensaje de alerta con tono asq
+#define MOCKMSG "-WXR-TOR-039173-039051-139069+0030-1591829-KCLE/NWS-"
+
 class MockRadio {
 private:
   byte _case;
   byte _step;
+  byte _state;
   unsigned long _updated;
-  boolean _next(unsigned int);
+  unsigned long _paused;
+  boolean _fsm(byte, byte, unsigned int, unsigned int);
 
 public:
   MockRadio();
-  void test(byte);
   boolean begin();
   byte getASQ();
   byte getSAMEState();
