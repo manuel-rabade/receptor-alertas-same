@@ -172,7 +172,7 @@ void loop() {
       relayOff();
       Serial.println("SAME_ALERT_OFF");
       sameAlert = false;
-      if (sameRwtEnabled || sameRwtEnabled) {
+      if (sameRwtEnabled || sameRmtEnabled) {
         io.ledsWaitRT();
       } else {
         io.ledsWait();
@@ -183,7 +183,7 @@ void loop() {
         testAlert = false;
         audioOff();
         relayOff();
-        if (sameRwtEnabled || sameRwtEnabled) {
+        if (sameRwtEnabled || sameRmtEnabled) {
           io.ledsWaitRT();
         } else {
           io.ledsWait();
@@ -307,7 +307,7 @@ void sameEnd() {
     if (config.getRelay() < 3) {
       Serial.println("SAME_ALERT_OFF");
       sameAlert = false;
-      if (sameRwtEnabled || sameRwtEnabled) {
+      if (sameRwtEnabled || sameRmtEnabled) {
         io.ledsWaitRT();
       } else {
         io.ledsWait();
