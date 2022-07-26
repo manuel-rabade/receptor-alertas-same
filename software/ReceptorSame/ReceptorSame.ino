@@ -337,7 +337,7 @@ void sameReset() {
 void audioOn() {
   if (!audioState) {
     Serial.println("AUDIO_ON");
-    radio.setMuteVolume(true);
+    radio.setMuteVolume(false);
     audioState = true;
     if (config.getRelay() == 1) {
       relayOn();
@@ -348,7 +348,7 @@ void audioOn() {
 void audioOff() {
   if (audioState) {
     Serial.println("AUDIO_OFF");
-    radio.setMuteVolume(false);
+    radio.setMuteVolume(true);
     audioState = false;
     if (config.getRelay() == 1) {
       relayOff();
