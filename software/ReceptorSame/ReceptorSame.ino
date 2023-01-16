@@ -314,6 +314,10 @@ void sameEnd() {
       }
     }
   }
+  // ¿se recibieron 2 cabeceras?
+  if (sameHeadersCount == 2) {
+    sameMessage();
+  }
   sameReset();
 }
 
