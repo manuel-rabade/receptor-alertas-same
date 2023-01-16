@@ -3,6 +3,7 @@
 MockRadio::MockRadio() {
   _case = MOCKRADIO;
   _step = 0;
+  _count = 0;
   _updated = millis();
 }
 
@@ -26,7 +27,7 @@ byte MockRadio::getASQ() {
 }
 
 byte MockRadio::getSAMEState() {
-  if (_case > 1) {
+  if (_case > 1 && _case < 5) {
     if (_fsm(0, 10000))  {
       return 0;  // retardo
     }
@@ -37,9 +38,9 @@ byte MockRadio::getSAMEState() {
       return 2; // inicio cabecera
     }
     if (_fsm(3, 1000)) {
-      return 3; // cabecera 2 lista
+      return 3; // cabecera 1 lista
     }
-    if (_fsm(4,500)) {
+    if (_fsm(4, 500)) {
       return 1; // preambulo
     }
     if (_fsm(5, 1000)) {
@@ -48,7 +49,7 @@ byte MockRadio::getSAMEState() {
     if (_fsm(6, 1000)) {
       return 3; // cabecera 2 lista
     }
-    if (_fsm(7,500)) {
+    if (_fsm(7, 500)) {
       return 1; // preambulo
     }
     if (_fsm(8, 1000)) {
@@ -78,11 +79,109 @@ byte MockRadio::getSAMEState() {
     }
     return 0;
   }
+  if (_case == 5) {
+    if (_fsm(0, 10000))  {
+      return 0;  // retardo
+    }
+    if (_fsm(1, 500))  {
+      return 1;  // preambulo
+    }
+    if (_fsm(2, 1000)) {
+      return 2; // inicio cabecera
+    }
+    if (_fsm(3, 1000)) {
+      return 3; // cabecera 1 lista
+    }
+    if (_fsm(4, 500)) {
+      return 1; // preambulo
+    }
+    if (_fsm(5, 1000)) {
+      return 2; // inicio cabecera
+    }
+    if (_fsm(6, 1000)) {
+      return 3; // cabecera 2 lista
+    }
+    if (_fsm(7, 500)) {
+      return 1; // preambulo
+    }
+    if (_fsm(8, 1000)) {
+      return 0; // fin de mensaje
+    }
+    if (_fsm(9, 500)) {
+      return 1; // preambulo
+    }
+    if (_fsm(10, 1000)) {
+      return 0; // fin de mensaje
+    }
+    if (_fsm(11, 500)) {
+      return 1; // preambulo
+    }
+    if (_fsm(12, 1000)) {
+      return 0; // fin de mensaje
+    }
+    return 0;
+  }
+  if (_case == 6) {
+    if (_fsm(0, 10000))  {
+      return 0;  // retardo
+    }
+    if (_fsm(1, 500))  {
+      return 1;  // preambulo
+    }
+    if (_fsm(2, 500)) {
+      return 2; // inicio cabecera
+    }
+    if (_fsm(3, 500)) {
+      return 3; // cabecera 1 lista
+    }
+    if (_fsm(4, 500)) {
+      return 1; // preambulo
+    }
+    if (_fsm(5, 500)) {
+      return 2; // inicio cabecera
+    }
+    if (_fsm(6, 500)) {
+      return 3; // cabecera 2 lista
+    }
+    if (_fsm(7, 500)) {
+      return 1; // preambulo
+    }
+    if (_fsm(8, 500)) {
+      return 2; // inicio cabecera
+    }
+    if (_fsm(9, 500)) {
+      return 3; // cabecera 3 lista
+    }
+    if (_fsm(10, 500)) {
+      return 0; // fin de mensaje
+    }
+    if (_fsm(11, 500)) {
+      return 1; // preambulo
+    }
+    if (_fsm(12, 500)) {
+      return 0; // fin de mensaje
+    }
+    if (_fsm(13, 500)) {
+      return 1; // preambulo
+    }
+    if (_fsm(14, 500)) {
+      return 0; // fin de mensaje
+    }
+    if (_fsm(15, 500)) {
+      // repetimos 3 veces mensaje
+      _count++;
+      if (_count < 3) {
+        _step = 1;
+      }
+      return 1; // preambulo
+    }
+    return 0;
+  }
   return 0;
 }
 
 byte MockRadio::getSAMESize() {
-  if (_case == 2) {
+  if (_case == 2 || _case == 5 || _case == 6) {
     return 42;
   } else if (_case == 3 || _case == 4) {
     return 52;
@@ -92,7 +191,7 @@ byte MockRadio::getSAMESize() {
 }
 
 void MockRadio::getSAMEMessage(byte size, byte message[]) {
-  if (_case == 2 || _case == 3 || _case == 4) {
+  if (_case > 1 && _case < 7) {
     strncpy(message, MOCKMSG, size);
   }
 }
