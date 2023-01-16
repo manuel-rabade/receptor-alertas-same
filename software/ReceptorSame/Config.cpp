@@ -65,6 +65,14 @@ byte Config::getRelay() {
   return _config.relay;
 }
 
+boolean Config::setSASMEX(boolean mode) {
+  _config.sasmex = mode;
+}
+
+boolean Config::getSASMEX() {
+  return _config.sasmex;
+}
+
 void Config::setRwtPeriod(unsigned int minutes) {
   _config.rwtPeriod = minutes * 60000; // minutos a millis
 }
