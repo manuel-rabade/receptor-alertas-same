@@ -19,6 +19,7 @@ void setup() {
     config.setMute(false);
     config.setVolume(50);
     config.setRelay(3);
+    config.setSASMEX(true);
     config.setRwtPeriod(0);
     config.setRmtPeriod(0);
     config.emptyAreaCodes();
@@ -45,6 +46,8 @@ void setup() {
   Serial.println(config.getVolume());
   Serial.print("MEM_RELAY,");
   Serial.println(config.getRelay());
+  Serial.print("MEM_SASMEX,");
+  Serial.println(config.getSASMEX());
   Serial.print("MEM_RWT_PERIOD,");
   Serial.println(config.getRwtPeriod());
   Serial.print("MEM_RMT_PERIOD,");
