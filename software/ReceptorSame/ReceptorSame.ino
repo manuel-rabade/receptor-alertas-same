@@ -5,7 +5,7 @@
 #include "Config.h"
 
 // configuración
-#define CONFIG_VERSION 0x10 // versión memoria
+#define CONFIG_VERSION 0x11 // versión memoria
 #define SAME_TIMEOUT 6000 // tiempo de espera maximo para recibir un mensaje same completo (segundos)
 
 // maquina de estados same
@@ -574,6 +574,7 @@ void configDefaults() {
   config.setMute(true);
   config.setVolume(10);
   config.setRelay(1);
+  config.setSASMEX(true);
   config.setRwtPeriod(0);
   config.setRmtPeriod(0);
   config.emptyAreaCodes();
