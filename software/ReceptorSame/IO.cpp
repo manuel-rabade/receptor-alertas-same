@@ -1,6 +1,6 @@
 #include "IO.h"
 
-IO::IO() {
+IO::IO(byte c) {
   // configuramos puertos
   for (byte i = 0; i < 2; i++) {
     pinMode(_ledsPcbPin[i], OUTPUT);
@@ -8,6 +8,12 @@ IO::IO() {
   }
   pinMode(RELAY_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
+
+  // configuracion especial
+  _config = c;
+  if (_config & 0x01) {
+    pinMode(AUDIO_PLAY_PIN, OUTPUT);
+  }
 }
 
 boolean IO::isButtonTriggered() {
@@ -93,7 +99,31 @@ void IO::ledsAlert() {
   ledFast(1);
 }
 
-void IO::ledsRefresh() {
+void IO::_ledUpdate(byte n, boolean s) {
+  digitalWrite(_ledsPcbPin[n], s);
+  digitalWrite(_ledsAuxPin[n], s);
+  _ledsState[n] = s;
+  _ledsLastUpdate[n] = millis();
+}
+
+void IO::relayOn() {
+  digitalWrite(RELAY_PIN, HIGH);
+}
+
+void IO::relayOff() {
+  digitalWrite(RELAY_PIN, LOW);
+}
+
+void IO::audioPlayOn() {
+  _audioPlayOn = true;
+}
+
+void IO::audioPlayOff() {
+  _audioPlayOn = false;
+}
+
+void IO::refresh() {
+  // leds
   for (byte n = 0; n < 2; n++) {
     // tiempo de parpadeo
     unsigned long blink_time = 0;
@@ -109,19 +139,16 @@ void IO::ledsRefresh() {
       _ledUpdate(n, !_ledsState[n]);
     }
   }
-}
-
-void IO::_ledUpdate(byte n, boolean s) {
-  digitalWrite(_ledsPcbPin[n], s);
-  digitalWrite(_ledsAuxPin[n], s);
-  _ledsState[n] = s;
-  _ledsLastUpdate[n] = millis();
-}
-
-void IO::relayOn() {
-  digitalWrite(RELAY_PIN, HIGH);
-}
-
-void IO::relayOff() {
-  digitalWrite(RELAY_PIN, LOW);
+  // audio play
+  if (_config & 0x01) {
+    if (_audioPlayOn) {
+      if (millis() - _audioPlayLastUpdate > AUDIO_PLAY_TIME) {
+        _audioPlayState = !_audioPlayState;
+        _audioPlayLastUpdate = millis();
+      }
+    } else {
+      _audioPlayState = LOW;
+    }
+    digitalWrite(AUDIO_PLAY_PIN, _audioPlayState);
+  }
 }

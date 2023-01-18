@@ -31,9 +31,16 @@
 // pin relay
 #define RELAY_PIN 3
 
+// pin audio player
+#define AUDIO_PLAY_PIN A0
+#define AUDIO_PLAY_TIME 100
+
 class IO {
 
  private:
+  // configuracion
+  byte _config = 0x00;
+
   // pins de entrada/salida
   byte _ledsPcbPin[2] = {LEDS_PCB};
   byte _ledsAuxPin[2] = {LEDS_AUX};
@@ -42,7 +49,7 @@ class IO {
   boolean _buttonPrevState = LOW;
   boolean _buttonTriggered = false;
   int _buttonIntegrator = 0;
-  unsigned long _buttonLastUpdate;
+  unsigned long _buttonLastUpdate = 0;
 
   // control leds
   byte _ledsMode[2] = {LED_OFF, LED_OFF};
@@ -52,8 +59,14 @@ class IO {
   // actualizacion leds
   void _ledUpdate(byte, boolean);
 
+  // reproductor audio
+  boolean _audioPlayOn = false;
+  boolean _audioPlayState = LOW;
+  unsigned long _audioPlayLastUpdate = 0;
+
  public:
-  IO();
+  IO(byte);
+  void refresh();
 
   // boton
   boolean isButtonTriggered();
@@ -65,7 +78,6 @@ class IO {
   void ledFast(byte);
 
   // leds
-  void ledsRefresh();
   void ledsBegin();
   void ledsError();
   void ledsWait();
@@ -75,6 +87,10 @@ class IO {
   // relay
   void relayOn();
   void relayOff();
+
+  // audio player
+  void audioPlayOn();
+  void audioPlayOff();
 };
 
 #endif

@@ -1,8 +1,10 @@
 #include "IO.h"
 
+#define CONFIG 0x01
 #define DELAY 5000
+#define AUDIO_DELAY 60000
 
-IO io = IO();
+IO io = IO(CONFIG);
 byte state = 1;
 byte prevState = 0;
 unsigned long lastUpdate = 0;
@@ -61,20 +63,32 @@ void loop() {
       Serial.println("LEDS_ALERT");
       io.ledsAlert();
       break;
+    case 10:
+      Serial.println("AUDIO_PLAY_ON");
+      io.audioPlayOn();
+      break;
+    case 11:
+      Serial.println("AUDIO_PLAY_OFF");
+      io.audioPlayOff();
+      break;
     }
     prevState = state;
     lastUpdate = millis();
   }
 
-  if (millis() - lastUpdate > DELAY) {
-    if (state == 9) {
+  unsigned long _delay = DELAY;
+  if (state == 10) {
+    _delay = AUDIO_DELAY;
+  }
+  if (millis() - lastUpdate > _delay) {
+    if (state == 11) {
       state = 0;
     } else {
       state++;
     }
   }
 
-  io.ledRefresh();
+  io.refresh();
   delay(50);
 }
 
