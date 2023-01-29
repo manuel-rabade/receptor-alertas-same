@@ -21,7 +21,7 @@
 // #define MOCKMSG "-CIV-RWT-000000+0300-832300-XDIF/005-....."
 
 // #define MOCKRADIO 6 // mensaje de alerta sismica
-// #define MOCKMSG "-CIV-EQW-000000+0005-832326-XDIF/005-....."
+#define MOCKMSG "-CIV-EQW-000000+0005-832326-XDIF/005-....."
 
 class MockRadio {
 private:
