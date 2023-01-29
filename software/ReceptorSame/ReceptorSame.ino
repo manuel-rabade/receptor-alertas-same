@@ -464,12 +464,23 @@ void commands() {
     if (cmd.isArg()) {
       byte relay = cmd.getArgByte();
       if (config.setRelay(relay)) {
-        Serial.print(F("RELAY,"));
-        Serial.println(relay);
         break;
       }
     }
     Serial.println(F("RELAY_ERROR"));
+    break;
+  case CMD_CDMX:
+    if (cmd.isArg()) {
+      byte cdmx = cmd.getArgByte();
+      if (cdmx == 1) {
+        config.setCDMX(true);
+        break;
+      } else if (cdmx == 0) {
+        config.setCDMX(false);
+        break;
+      }
+    }
+    Serial.println(F("CDMX_ERROR"));
     break;
   case CMD_RWT_PERIOD:
     if (cmd.isArg()) {
@@ -597,6 +608,8 @@ void configDump() {
   Serial.println(config.getVolume());
   Serial.print(F("CONFIG_RELAY,"));
   Serial.println(config.getRelay());
+  Serial.print(F("CONFIG_CDMX,"));
+  Serial.println(config.getCDMX());
   Serial.print(F("CONFIG_RWT_PERIOD,"));
   Serial.println(config.getRwtPeriod());
   Serial.print(F("CONFIG_RMT_PERIOD,"));
