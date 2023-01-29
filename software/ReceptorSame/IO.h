@@ -38,9 +38,6 @@
 class IO {
 
  private:
-  // configuracion
-  byte _config = 0x00;
-
   // pins de entrada/salida
   byte _ledsPcbPin[2] = {LEDS_PCB};
   byte _ledsAuxPin[2] = {LEDS_AUX};
@@ -65,7 +62,7 @@ class IO {
   unsigned long _audioPlayLastUpdate = 0;
 
  public:
-  IO(byte);
+  IO();
   void refresh();
 
   // boton

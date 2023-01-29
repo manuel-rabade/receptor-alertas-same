@@ -1,10 +1,9 @@
 #include "IO.h"
 
-#define CONFIG 0x01
 #define DELAY 5000
 #define AUDIO_DELAY 60000
 
-IO io = IO(CONFIG);
+IO io;
 byte state = 1;
 byte prevState = 0;
 unsigned long lastUpdate = 0;

@@ -1,6 +1,6 @@
 #include "IO.h"
 
-IO::IO(byte c) {
+IO::IO() {
   // configuramos puertos
   for (byte i = 0; i < 2; i++) {
     pinMode(_ledsPcbPin[i], OUTPUT);
@@ -8,12 +8,7 @@ IO::IO(byte c) {
   }
   pinMode(RELAY_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
-
-  // configuracion especial
-  _config = c;
-  if (_config & 0x01) {
-    pinMode(AUDIO_PLAY_PIN, OUTPUT);
-  }
+  pinMode(AUDIO_PLAY_PIN, OUTPUT);
 }
 
 boolean IO::isButtonTriggered() {
@@ -140,15 +135,13 @@ void IO::refresh() {
     }
   }
   // audio play
-  if (_config & 0x01) {
-    if (_audioPlayOn) {
-      if (millis() - _audioPlayLastUpdate > AUDIO_PLAY_TIME) {
-        _audioPlayState = !_audioPlayState;
-        _audioPlayLastUpdate = millis();
-      }
-    } else {
-      _audioPlayState = LOW;
+  if (_audioPlayOn) {
+    if (millis() - _audioPlayLastUpdate > AUDIO_PLAY_TIME) {
+      _audioPlayState = !_audioPlayState;
+      _audioPlayLastUpdate = millis();
     }
-    digitalWrite(AUDIO_PLAY_PIN, _audioPlayState);
+  } else {
+    _audioPlayState = LOW;
   }
+  digitalWrite(AUDIO_PLAY_PIN, _audioPlayState);
 }
