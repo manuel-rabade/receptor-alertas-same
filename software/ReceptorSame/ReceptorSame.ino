@@ -7,6 +7,7 @@
 // configuración
 #define CONFIG_VERSION 0x12 // versión memoria
 #define SAME_TIMEOUT 6000 // tiempo de espera maximo para recibir un mensaje same completo (segundos)
+#define ALERT_CDMX_MILLIS 60000 // tiempo de duracion alerta para cdmx
 
 // maquina de estados same
 #define SAME_EOM_DET 0
@@ -100,6 +101,7 @@ void loop() {
   // recepción mensajes same
   byte sameState = radio.getSAMEState();
   if (samePrevState != sameState) {
+    samePrevState = sameState;
     switch (sameState) {
     case SAME_EOM_DET:
       // fin del mensaje
@@ -128,7 +130,6 @@ void loop() {
       }
       break;
     }
-    samePrevState = sameState;
   }
 
   // timeout mensaje same
@@ -196,6 +197,7 @@ void loop() {
         relayOn();
       }
     }
+    relayOff();
   }
 
   // refrescar io
@@ -287,6 +289,13 @@ void sameMessage() {
     return;
   }
 
+  // alerta cdmx
+  if (strncmp(event, "EQW", 3) == 0 && config.getCDMX()) {
+    Serial.println("CDMX_ALERT_ON");
+    alertCDMX();
+    return;
+  }
+
   // disparamos alerta
   Serial.println("SAME_ALERT_ON");
   sameAlert = true;
@@ -374,6 +383,49 @@ void relayOff() {
     io.relayOff();
     relayState = false;
   }
+}
+
+// ---------------------------------------------------------------------------
+// alerta cdmx
+
+void alertCDMX () {
+  io.audioPlayOn();
+  io.ledsAlert();
+  if (config.getRelay() > 0) {
+    relayOn();
+  }
+  unsigned long alertTimer = millis();
+  while (millis() - alertTimer < ALERT_CDMX_MILLIS) {
+    // descartamos mensajes same
+    byte sameState = radio.getSAMEState();
+    if (samePrevState != sameState) {
+      samePrevState = sameState;
+      switch (sameState) {
+      case SAME_EOM_DET:
+        Serial.println("SAME_EOM_DET");
+        break;
+      case SAME_PRE_DET:
+        Serial.println("SAME_PRE_DET");
+        break;
+      case SAME_HDR_DET:
+        Serial.println("SAME_HDR_DET");
+        break;
+      case SAME_HDR_RDY:
+        Serial.println("SAME_HDR_RDY");
+        break;
+      }
+    }
+    // refrescar io
+    io.refresh();
+    delay(50);
+  }
+  io.audioPlayOff();
+  if (sameRwtEnabled || sameRmtEnabled) {
+    io.ledsWaitRT();
+  } else {
+    io.ledsWait();
+  }
+  relayOff();
 }
 
 // ---------------------------------------------------------------------------
