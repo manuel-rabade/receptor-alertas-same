@@ -65,12 +65,12 @@ byte Config::getRelay() {
   return _config.relay;
 }
 
-boolean Config::setSASMEX(boolean mode) {
-  _config.sasmex = mode;
+boolean Config::setCDMX(boolean mode) {
+  _config.cdmx = mode;
 }
 
-boolean Config::getSASMEX() {
-  return _config.sasmex;
+boolean Config::getCDMX() {
+  return _config.cdmx;
 }
 
 void Config::setRwtPeriod(unsigned int minutes) {

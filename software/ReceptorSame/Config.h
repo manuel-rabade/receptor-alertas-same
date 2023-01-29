@@ -11,7 +11,7 @@ struct Memory {
   byte channel;
   byte volume;
   byte relay;
-  byte sasmex;
+  byte cdmx;
   unsigned long rwtPeriod; // millis
   unsigned long rmtPeriod; // millis
   char areaCodes[CODES_MAX][6];
@@ -47,8 +47,8 @@ public:
   byte getVolume();
   boolean setRelay(byte);
   byte getRelay();
-  boolean setSASMEX(boolean);
-  boolean getSASMEX();
+  boolean setCDMX(boolean);
+  boolean getCDMX();
   void setRwtPeriod(unsigned int);
   unsigned int getRwtPeriod();
   unsigned long getRwtPeriodMillis();
