@@ -72,7 +72,7 @@ void setup() {
     Serial.print(F("SI4707_ERROR"));
     io.ledsError();
     while (1) {
-      io.ledsRefresh();
+      io.refresh();
       delay(50);
     }
   }
@@ -198,8 +198,8 @@ void loop() {
     }
   }
 
-  // refrescar leds
-  io.ledsRefresh();
+  // refrescar io
+  io.refresh();
   delay(50);
 }
 
@@ -574,7 +574,7 @@ void configDefaults() {
   config.setMute(true);
   config.setVolume(10);
   config.setRelay(1);
-  config.setSASMEX(true);
+  config.setCDMX(true);
   config.setRwtPeriod(0);
   config.setRmtPeriod(0);
   config.emptyAreaCodes();
