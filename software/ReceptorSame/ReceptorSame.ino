@@ -5,7 +5,7 @@
 #include "Config.h"
 
 // configuración
-#define CONFIG_VERSION 0x11 // versión memoria
+#define CONFIG_VERSION 0x12 // versión memoria
 #define SAME_TIMEOUT 6000 // tiempo de espera maximo para recibir un mensaje same completo (segundos)
 
 // maquina de estados same

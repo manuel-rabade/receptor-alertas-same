@@ -12,7 +12,7 @@ void setup() {
   Serial.print("MEM_VERSION,");
   Serial.println(config.getVersion());
 
-  if (config.getVersion() != 0x03) {
+  if (config.getVersion() != 0x12) {
     Serial.println("SET_DEFAULTS");
     config.setVersion(0x03);
     config.setChannel(7);
