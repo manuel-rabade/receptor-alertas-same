@@ -33,7 +33,7 @@
 
 // pin audio player
 #define AUDIO_PLAY_PIN A0
-#define AUDIO_PLAY_TIME 100
+#define AUDIO_PLAY_TIME 10
 
 class IO {
 
