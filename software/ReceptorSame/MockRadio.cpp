@@ -190,7 +190,7 @@ byte MockRadio::getSAMESize() {
   }
 }
 
-void MockRadio::getSAMEMessage(byte size, byte message[]) {
+void MockRadio::getSAMEMessage(byte size, byte *message) {
   if (_case > 1 && _case < 7) {
     strncpy(message, MOCKMSG, size);
   }
