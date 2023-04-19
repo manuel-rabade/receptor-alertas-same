@@ -528,13 +528,12 @@ void commands() {
       byte cdmx = cmd.getArgByte();
       if (cdmx == 1) {
         config.setCDMX(true);
-        break;
       } else if (cdmx == 0) {
         config.setCDMX(false);
-        break;
       }
       Serial.print(F("CDMX,"));
       Serial.println(config.getCDMX());
+      break;
     }
     Serial.println(F("CDMX_ERROR"));
     break;
