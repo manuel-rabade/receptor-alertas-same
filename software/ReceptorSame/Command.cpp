@@ -4,7 +4,6 @@
 struct cmd table[] = {
   "AREA_ADD", CMD_AREA_ADD,
   "AREA_DEL", CMD_AREA_DEL,
-  "AUDIO", CMD_AUDIO,
   "CDMX", CMD_CDMX,
   "CHANNEL", CMD_CHANNEL,
   "DEFAULTS", CMD_DEFAULTS,

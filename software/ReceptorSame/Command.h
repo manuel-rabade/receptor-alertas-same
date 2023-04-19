@@ -10,22 +10,21 @@
 // llaves de comandos
 #define CMD_AREA_ADD 1
 #define CMD_AREA_DEL 2
-#define CMD_AUDIO 3
-#define CMD_CDMX 4
-#define CMD_CHANNEL 5
-#define CMD_DEFAULTS 6
-#define CMD_DUMP 7
-#define CMD_EVENT_ADD 8
-#define CMD_EVENT_DEL 9
-#define CMD_FREQUENCY 10
-#define CMD_MUTE 11
-#define CMD_QUALITY 12
-#define CMD_RELAY 13
-#define CMD_RELOAD 14
-#define CMD_RMT_PERIOD 15
-#define CMD_RWT_PERIOD 16
-#define CMD_SAVE 17
-#define CMD_VOLUME 18
+#define CMD_CDMX 3
+#define CMD_CHANNEL 4
+#define CMD_DEFAULTS 5
+#define CMD_DUMP 6
+#define CMD_EVENT_ADD 7
+#define CMD_EVENT_DEL 8
+#define CMD_FREQUENCY 9
+#define CMD_MUTE 10
+#define CMD_QUALITY 11
+#define CMD_RELAY 12
+#define CMD_RELOAD 13
+#define CMD_RMT_PERIOD 14
+#define CMD_RWT_PERIOD 15
+#define CMD_SAVE 16
+#define CMD_VOLUME 17
 
 struct cmd {
   char *str;
