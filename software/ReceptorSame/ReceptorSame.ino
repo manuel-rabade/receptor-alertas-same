@@ -74,7 +74,7 @@ void setup() {
     io.ledsError();
     while (1) {
       io.refresh();
-      delay(50);
+      delay(10);
     }
   }
 
@@ -178,31 +178,30 @@ void loop() {
       } else {
         io.ledsWait();
       }
-    } else {
-      if (testAlert) {
-        Serial.println("TEST_ALERT_OFF");
-        testAlert = false;
-        audioOff();
-        relayOff();
-        if (sameRwtEnabled || sameRmtEnabled) {
-          io.ledsWaitRT();
-        } else {
-          io.ledsWait();
-        }
+    } else if (relayState && !testAlert) {
+      relayOff();
+    } else if (testAlert) {
+      Serial.println("TEST_ALERT_OFF");
+      testAlert = false;
+      audioOff();
+      relayOff();
+      if (sameRwtEnabled || sameRmtEnabled) {
+        io.ledsWaitRT();
       } else {
-        Serial.println("TEST_ALERT_ON");
-        testAlert = true;
-        io.ledsAlert();
-        audioOn();
-        relayOn();
+        io.ledsWait();
       }
+    } else {
+      Serial.println("TEST_ALERT_ON");
+      testAlert = true;
+      io.ledsAlert();
+      audioOn();
+      relayOn();
     }
-    relayOff();
   }
 
   // refrescar io
   io.refresh();
-  delay(50);
+  delay(10);
 }
 
 // ---------------------------------------------------------------------------
@@ -293,6 +292,7 @@ void sameMessage() {
   if (strncmp(event, "EQW", 3) == 0 && config.getCDMX()) {
     Serial.println("CDMX_ALERT_ON");
     alertCDMX();
+    Serial.println("CDMX_ALERT_OFF");
     return;
   }
 
@@ -417,7 +417,7 @@ void alertCDMX () {
     }
     // refrescar io
     io.refresh();
-    delay(50);
+    delay(10);
   }
   io.audioPlayOff();
   if (sameRwtEnabled || sameRmtEnabled) {
@@ -516,6 +516,8 @@ void commands() {
     if (cmd.isArg()) {
       byte relay = cmd.getArgByte();
       if (config.setRelay(relay)) {
+        Serial.print(F("RELAY,"));
+        Serial.println(config.getRelay());
         break;
       }
     }
@@ -531,6 +533,8 @@ void commands() {
         config.setCDMX(false);
         break;
       }
+      Serial.print(F("CDMX,"));
+      Serial.println(config.getCDMX());
     }
     Serial.println(F("CDMX_ERROR"));
     break;
