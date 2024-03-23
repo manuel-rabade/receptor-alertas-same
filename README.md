@@ -1,6 +1,8 @@
-# Sistema embebido para recibir alertas de riesgo codificadas con el protocolo SAME
+# Receptor alertas SAME
 
-Receptor de alertas de riesgo transmitidas utilizando el protocolo para la codificación de mensajes de área específica, mejor conocido como protocolo SAME por sus siglas en inglés.
+Este deposito contiene el diseño de hardware y código fuente de mi trabajo de tesis, titulado [Sistema embebido para recibir alertas de riesgo codificadas con el protocolo SAME](http://www.ptolomeo.unam.mx:8080/xmlui/handle/RepoFi/18971), el cual realice para obtener el título de Ingeniero en Computación en la Facultad de Ingeniería de la Universidad Nacional Autónoma de México.
+
+Como resultado de mi proyecto de titulación, se desarrolló un sistema embebido capaz de recibir alertas de riesgo transmitidas mediante el protocolo SAME y difundirlas a través de medios visuales, auditivos o electrónicos. Además, se documentan las bases técnicas para el desarrollo de productos o servicios que amplíen el aprovechamiento y la cobertura de los sistemas de alerta de riesgos.
 
 ## Organización
 
